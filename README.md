@@ -26,7 +26,7 @@
 **• 6. 어려웠던 부분**
 
 
-# • 1.메인 화면과 코드설명
+# • 1. 메인 화면과 코드설명
 
 ![main_display](https://github.com/user-attachments/assets/e2c6e7e4-caf3-49a7-8a0f-52959996dd57)
 
@@ -90,11 +90,11 @@
 
 • 하단의 **'추가하기'** 와 **'조회하기'** 버튼은 2,5에서 설명할 예정이다.
 
-# • 2.일정생성화면과 코드설명
+# • 2. 일정생성화면과 코드설명
 
 ![create_display](https://github.com/user-attachments/assets/d10f98a1-a696-4b15-b1fe-f8a7b3ad7157)
 
-• 하단의 **'추가하기'** 버튼을 누르면 일정 생성하기 화면이 뜨고, 일정생성화면으로 넘어가면서 사용자가선택한 날짜값이 CreateActivity쪽으로 넘어간다. 
+• 메인화면에서 하단의 **'추가하기'** 버튼을 누르면 일정 생성하기 화면이 뜨고, 일정생성화면으로 넘어가면서 사용자가선택한 날짜값이 CreateActivity쪽으로 넘어간다. 
 
     //onclick - BottomButton
     Btn_create.setOnClickListener(new View.OnClickListener() {
@@ -166,7 +166,7 @@
 ![image](https://github.com/user-attachments/assets/e896c265-601a-4b02-9ff8-83cbe677d4c3)
 
 
-• _**만약에 사용자가 카테고리를 선택하지 않거나, 일정내용을 적지 않았다면 "현제 빈 값이 존재합니다." 라고 경고문(Toast)이 뜬다**_
+• _**만약에 사용자가 카테고리를 선택하지 않았거나, 일정내용을 적지 않았다면 "현제 빈 값이 존재합니다." 라고 경고문(Toast)이 뜬다**_
 
     content = et_content.getText().toString();
         if (content.isEmpty() || selected_category==null){
@@ -175,7 +175,122 @@
 
 # • 2. 일정수정화면과 코드설명
 
+• 우선 일정을 수정할려면 메인화면에서 하단의 일정중 수정,삭제하고 싶은 일정을 누른 다음, 대화창이 뜨면 "수정하기"버튼을 누르면 수정화면으로 이동한다.
 
-  
+![ezgif-1456d6d5dbd58e](https://github.com/user-attachments/assets/7f7fb4ab-0983-484a-956f-3190c1c151e4)
+
+
+• 이때 하단의 일정은 리사이클러뷰(MyRvAdapter)로 통해서 표시되기 때문에 **대화창이 화면에 표시되는 코드는 **MyRvAdapter** 에 있다**.
+   
+    ...
+    holder.tv_category.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            category = holder.tv_category.getText().toString();
+            content = holder.tv_content.getText().toString();
+
+
+            //AlertDialog 생성 및 설정
+            AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+            LayoutInflater inflater = LayoutInflater.from(view.getContext());
+            View dialogView = inflater.inflate(R.layout.edit_dialog,null);
+            builder.setView(dialogView);
+            AlertDialog dialog = builder.create();
+            dialog.show();
+
+
+            //TextView - In Dialog
+            TextView tv_d_content = dialogView.findViewById(R.id.tv_d_content);
+            TextView tv_d_category = dialogView.findViewById(R.id.tv_d_category);
+            tv_d_content.setText(content);
+            tv_d_category.setText(category);
+
+
+            //Button - In Dialog
+            Button Btn_d_edit = dialogView.findViewById(R.id.edit_button);
+            Button Btn_d_delete = dialogView.findViewById(R.id.delete_button);
+            Button Btn_d_cancel = dialogView.findViewById(R.id.cancel_button);
+
+
+            //onclick -- EDIT
+            Btn_d_edit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(view.getContext(), EditActivity.class);
+                    intent.putExtra("EContent",content);
+                    intent.putExtra("ECategory",category);
+                    intent.putExtra("year",year);
+                    intent.putExtra("month",month);
+                    intent.putExtra("day",day);
+                    view.getContext().startActivity(intent);
+            
+                }
+            });
+
+• 수정화면으로 넘어가면서 해당 일정의 내용와 카테고리정보가 **EditActivity** 쪽으로 넘어간다.
+
+![edit_display](https://github.com/user-attachments/assets/9c0ae132-3a6e-4bcc-9111-ef6af9056663)
+
+• 수정화면으로 넘어오면 내용과 카테고리를 변경해주고 "변경하기"버튼을 누르면 성공적으로 변경이 된다.
+
+**_이때 수정내용과 카테고리중 하나라도 선택하지 않으면 "빈 값이 존재합니다"라고 경고문(Toast)이 화면에 표시된다._**
+
+    if (et_content==null){
+        Toast.makeText(EditActivity.this, "빈값이 존재합니다.", Toast.LENGTH_SHORT).show();
+    }
+
+![ezgif-5c7233e37bbfc8](https://github.com/user-attachments/assets/7f94fc64-aaaa-4aa4-b06d-f624ec0ae4ee)
+
+    Btn_change.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+        
+            //if -- Chang_Content is empty
+            if (et_content==null){
+                Toast.makeText(EditActivity.this, "빈값이 존재합니다.", Toast.LENGTH_SHORT).show();
+            }else{
+                //SET_COLOR
+                Btn_back.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                Btn_change.setBackgroundColor(Color.parseColor("#B2FFAF"));
+
+                change_content = et_content.getText().toString();
+
+                //RadioButton_isChecked()
+                if (rb_exercise.isChecked()){
+                    ScheduleClass newSchedule = new ScheduleClass(change_content,
+                        "운동",
+                        year,
+                        month,
+                        day);
+
+                    //Call
+                    Call<Void> call =  service.editSchedule(
+                            year,
+                            month,
+                            day,
+                            tv_b_content.getText().toString(),
+                            tv_b_category.getText().toString(),  //기존에있던 데이터를 찾기 위해서
+                            newSchedule);
+
+                    call.enqueue(new Callback<Void>() {
+                        @Override
+                        public void onResponse(Call<Void> call, Response<Void> response) {
+                            if (response.isSuccessful()){
+                                Toast.makeText(EditActivity.this, "변경성공", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(EditActivity.this,MainActivity.class);
+                                startActivity(intent);
+                                finish();
+                            }else{
+                                Toast.makeText(EditActivity.this, "변경실패", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    
+                        @Override
+                        public void onFailure(Call<Void> call, Throwable t) {
+                            Log.v("onFailure",t.getMessage());
+                        }
+                    });
+                }
+
 
 
