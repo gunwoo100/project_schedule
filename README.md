@@ -132,7 +132,7 @@
 
 • **일정을 추가할려면** 우선 사용자는 일정의 카테코리를 먼저 선택해야한다. 카테고리(RadioButton)를 누르면 오른쪽에 사용자가 선택한 카테고리가 표시된다.
 
-• 그 다음에는 일정내용을 적어준 다음에 "추가하기"버튼을 누르면 성공적으로 추가가 된다.
+• 일정내용을 적어준 다음에 "추가하기"버튼을 누르면 성공적으로 추가가 된다.
 
 ![ezgif-6bceb3770a4d38](https://github.com/user-attachments/assets/8f39343f-7a28-49b7-ac92-d52782a8e40a) -->
 ![ezgif-6360f2c53e7647](https://github.com/user-attachments/assets/ad62dd5e-fe89-48a1-b05c-8170e0373f2e) -->
@@ -229,22 +229,26 @@
 
 • 수정화면으로 넘어가면서 해당 일정의 내용와 카테고리정보가 **EditActivity** 쪽으로 넘어간다.
 
+**_• EditActivity_**
+
+    //INTENT-By RecyclerView
+    Intent intent = getIntent();
+    String content = intent.getStringExtra("EContent");
+    String category = intent.getStringExtra("ECategory");
+
+
+    //DateData(Int)
+    year = intent.getIntExtra("year",0);
+    month = intent.getIntExtra("month",0);
+    day = intent.getIntExtra("day",0);
+
 ![edit_display](https://github.com/user-attachments/assets/9c0ae132-3a6e-4bcc-9111-ef6af9056663)
 
 • 수정화면으로 넘어오면 내용과 카테고리를 변경해주고 "변경하기"버튼을 누르면 성공적으로 변경이 된다.
 
-**_이때 수정내용과 카테고리중 하나라도 선택하지 않으면 "빈 값이 존재합니다"라고 경고문(Toast)이 화면에 표시된다._**
-
-    if (et_content==null){
-        Toast.makeText(EditActivity.this, "빈값이 존재합니다.", Toast.LENGTH_SHORT).show();
-    }
-
-![ezgif-5c7233e37bbfc8](https://github.com/user-attachments/assets/7f94fc64-aaaa-4aa4-b06d-f624ec0ae4ee)
-
     Btn_change.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-        
             //if -- Chang_Content is empty
             if (et_content==null){
                 Toast.makeText(EditActivity.this, "빈값이 존재합니다.", Toast.LENGTH_SHORT).show();
@@ -281,16 +285,29 @@
                                 startActivity(intent);
                                 finish();
                             }else{
-                                Toast.makeText(EditActivity.this, "변경실패", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(EditActivity.this, "변경실패", Toast.LENGTH_SHORT).show();
                             }
                         }
-                    
-                        @Override
-                        public void onFailure(Call<Void> call, Throwable t) {
+
+                         @Override
+                         public void onFailure(Call<Void> call, Throwable t) {
                             Log.v("onFailure",t.getMessage());
                         }
                     });
                 }
+
+                else if (rb_meet.isChecked()){... (이 이후의 코드는 위의 코드와 유사하다)
+
+• 변경하기 버튼을 누르면 서버쪽으로 **editSchedule()** 이 호출되면서 변경한 내용값을 통해 데이터의 값을 변경한다.
+
+**_이때 수정내용과 카테고리중 하나라도 선택하지 않으면 "빈 값이 존재합니다"라고 경고문(Toast)이 화면에 표시된다._**
+
+    if (et_content==null){
+        Toast.makeText(EditActivity.this, "빈값이 존재합니다.", Toast.LENGTH_SHORT).show();
+    }
+
+![ezgif-5c7233e37bbfc8](https://github.com/user-attachments/assets/7f94fc64-aaaa-4aa4-b06d-f624ec0ae4ee)
+
 
 
 
