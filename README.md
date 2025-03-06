@@ -23,7 +23,9 @@
 
 **• 5. 일정 조회화면과 코드설명(SEARCH)**
 
-**• 6. 어려웠던 부분**
+**• 6. ToDoList화면과 코드설명**
+
+**• 7. 어려웠던 부분**
 
 
 # • 1. 메인 화면과 코드설명
@@ -173,7 +175,7 @@
             Toast.makeText(CreateActivity.this, "현재 빈값이 존재합니다.", Toast.LENGTH_SHORT).show();
             }
 
-# • 2. 일정수정화면과 코드설명
+# • 3. 일정수정화면과 코드설명
 
 • 우선 일정을 수정할려면 메인화면에서 하단의 일정중 수정,삭제하고 싶은 일정을 누른 다음, 대화창이 뜨면 "수정하기"버튼을 누르면 수정화면으로 이동한다.
 
@@ -307,6 +309,63 @@
     }
 
 ![ezgif-5c7233e37bbfc8](https://github.com/user-attachments/assets/7f94fc64-aaaa-4aa4-b06d-f624ec0ae4ee)
+
+# • 4. 일정 삭제화면과 코드설명
+
+• 일정을 삭제하려면 메인화면에서 하단의 일정중 삭제하고 싶은 일정을 클릭하면 대화상자가 나온다.
+
+그런 다음에 "삭제하기" 버튼을 누르면 성공적으로 삭제가 된다.
+
+![ezgif-5c20cc00c6fbec](https://github.com/user-attachments/assets/c6487021-5e64-4828-be78-cd35b9d10e68)
+
+_• 이때 일정을 눌렀을때 대화상자가 표시되는 코드는 리사이클러뷰쪽에 있다._
+
+    Btn_d_delete.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+
+            //Retrofit,Service
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl("http://10.0.2.2:8080")
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+
+            service = retrofit.create(ScheduleService.class);
+
+            //Call - DELETE
+            Call<Integer> call = service.deleteSchedule(year,month,day,content,category);
+            call.enqueue(new Callback<Integer>() {
+                @Override
+                public void onResponse(Call<Integer> call, Response<Integer> response) {
+                    if (response.isSuccessful()){
+                        Toast.makeText(view.getContext(), "성공", Toast.LENGTH_SHORT).show();
+                        dialog.dismiss();
+                    }else{
+                        Toast.makeText(view.getContext(), "실패", Toast.LENGTH_SHORT).show();
+                        dialog.dismiss();
+                    }
+                }
+
+                @Override
+                 public void onFailure(Call<Integer> call, Throwable t) {
+                    Log.v("onFailure",t.getMessage());
+                }
+            });
+        }
+    });
+
+• "삭제하기"버튼을 누르면 서버쪽으로 **deleteSchedule()** 이 호출되면서 서버에서 해당 데이터값을 지운다.
+
+
+
+
+
+
+
+
+
+
+
 
 
 
