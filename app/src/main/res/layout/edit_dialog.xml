@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/border">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="140dp"
+        android:layout_marginTop="16dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="2pt"
+                android:fontFamily="@font/cafe"
+                android:gravity="center"
+                android:text="일정내용 -"
+                android:textSize="27dp" />
+
+            <TextView
+                android:id="@+id/tv_d_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="2pt"
+                android:fontFamily="@font/cafe"
+                android:gravity="center"
+                android:text="TextView"
+                android:textSize="27dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView18"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="2pt"
+                android:fontFamily="@font/cafe"
+                android:gravity="center"
+                android:text="카테고리 -"
+                android:textSize="27dp" />
+
+            <TextView
+                android:id="@+id/tv_d_category"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="2pt"
+                android:fontFamily="@font/cafe"
+                android:gravity="center"
+                android:text="TextView"
+                android:textSize="27dp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/edit_button"
+        android:layout_width="365dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="176dp"
+        android:backgroundTint="#E0D1D1"
+        android:fontFamily="@font/cafe"
+        android:text="수정하기 🔧"
+        android:textColor="#232121"
+        android:textSize="20dp"
+        app:cornerRadius="5pt"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/delete_button"
+        android:layout_width="365dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="236dp"
+        android:backgroundTint="#E0D1D1"
+        android:fontFamily="@font/cafe"
+        android:text="삭제하기 🗑️"
+        android:textColor="#232121"
+        android:textSize="20dp"
+        app:cornerRadius="5pt"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.506"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/cancel_button"
+        android:layout_width="365dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="292dp"
+        android:backgroundTint="#E0D1D1"
+        android:fontFamily="@font/cafe"
+        android:text="취소"
+        android:textColor="#000000"
+        android:textSize="20dp"
+        app:cornerRadius="5pt"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.506"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
