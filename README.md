@@ -27,6 +27,8 @@
 
 **• 7. 어려웠던 부분**
 
+**• 마무리**
+
 
 # • 1. 메인 화면과 코드설명
 
@@ -711,9 +713,12 @@ _**• DB**_
 
 **• 2. 코드정리**
 
-• ToDo화면 기능과 조회 기능을 만드는 과정에서 코드가 생각보다 복잡했고 변수명의 이름을 짓는데 어려움을 겪었다.
+• ToDo화면 기능과 조회 기능을 만드는 과정에서 코드가 생각보다 복잡했고 변수명의 중복과 이름을 짓는데 어려움을 겪었다.
 
 --> **액티비티 화면의 이름과 연관지어서 변수명을 지었고, 최대한 사용하지 않는 변수는 지우면서 코드를 정리했다**.  --> **전의 코트보다 가독성 ↑**
+
+    //EditText - getText()
+        EditContent = et_content.getText().toString();
 
 **• 3. 2개의 RecyclerView활용**
 
@@ -721,13 +726,38 @@ _**• DB**_
 
 --> **'새로고침버튼'을 추가해서 adapter의 값을 버튼을 누를때마다 Update()를 통해 데이터가 변경되면서 화면에 표시하는 기능으로 변경** -->**성공**
 
+    Btn_refresh.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {...
+
 ![화면 캡처 2025-03-11 173004](https://github.com/user-attachments/assets/8e0a3f08-1094-4f18-afb1-8ed5f8735e13)  ---->  ![화면 캡처 2025-03-11 173429](https://github.com/user-attachments/assets/45675852-1236-4097-8251-7e4bf3d73e47)
 
+**• 4. HTTP 중 Edit,Delete 코드 구현**
 
+• 데이터를 수정하고 삭제하는 요청코드를 작성하던도중 전달값을 year,month,day로 전달해서 만약 중복된 일정중 하나를 Edit,Delete하게 되면 두개의 데이터가 동시에 지워지는 문제점이 발생함
 
+--> **id값을 클래스에 추가해서 "id"를 통해 해당데이터를 수정,삭제하로고 변경** --> **중복된 일정이 있어도 사용자가 선택한 일정만 지워진다.**
 
+    public class ScheduleClass implements Serializable {               public class ToDoClass implements Serializable {
+        private String content;                                            private String todo_content;   
+        private String category;                                           private boolean achievement;
+        private int year;                                                  private int importance;  
+        private int month;                                                 **private Long todo_id;**
+        private int day;                                                                
+        **private Long id;**                                               ...
+       
+        ...
+    }                                                                 }                                                          
 
+그 이외에도 서버와의 통신 실패,데이터 저장 실패등이 있었다.
 
+# • 마무리
+
+지금까지 Project_schedule를 읽어 주셔서 감사합니다. 이번 프로젝트를 통해 서버와 안드로이드 통신하는 방법을 알게 되었고, 코딩속도와 사고력도 전프로젝트보때다 좋아진거 같습니다.
+
+감사합니다. (～￣▽￣)～
+
+    
 
 
 
