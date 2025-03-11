@@ -98,6 +98,8 @@
 
 • 메인화면에서 하단의 **'추가하기'** 버튼을 누르면 일정 생성하기 화면이 뜨고, 일정생성화면으로 넘어가면서 사용자가선택한 날짜값이 CreateActivity쪽으로 넘어간다. 
 
+_**• MainActivity**_
+
     //onclick - BottomButton
     Btn_create.setOnClickListener(new View.OnClickListener() {
         @Override
@@ -125,11 +127,11 @@
             super.onCreate(savedInstanceState);
             setContentView(R.layout.create_schedule);
     
-            //INTENT
+            //INTENT - MainActivity
             Intent intent = getIntent();
-            int year = intent.getIntExtra("year",0);
-            int month = intent.getIntExtra("month",0);
-            int day = intent.getIntExtra("day",0);
+            CreateDataYear = intent.getIntExtra("year",0);
+            CreateDataMonth = intent.getIntExtra("month",0);
+            CreateDataDay = intent.getIntExtra("day",0);
 
 
 • **일정을 추가할려면** 우선 사용자는 일정의 카테코리를 먼저 선택해야한다. 카테고리(RadioButton)를 누르면 오른쪽에 사용자가 선택한 카테고리가 표시된다.
@@ -142,42 +144,52 @@
 
 •"추가하기"버튼을 누르면 서버쪽으로 **createSchedule()** 이 호출되면서 DB로 저장이 된다.
 
+_**• CreateActivity**_
+
     Btn_add.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            ....
+            @Override
+            public void onClick(View view) {
+                //Animation
+                ...
 
-            content = et_content.getText().toString();
-            if (content.isEmpty() || selected_category==null){
-                Toast.makeText(CreateActivity.this, "현재 빈값이 존재합니다.", Toast.LENGTH_SHORT).show();
-            }else{
-                ScheduleClass schedule = new ScheduleClass(content,selected_category,year,month,day,null);
-                Call<ScheduleClass> call = service.createSchedule(schedule);
-                call.enqueue(new Callback<ScheduleClass>() {
-                    @Override
-                    public void onResponse(Call<ScheduleClass> call, Response<ScheduleClass> response) {
-                        if (response.isSuccessful()){
-                            Intent intent1 = new Intent();
-                            setResult(RESULT_OK,intent1);
-                            finish();
-                        }else{
-                            Toast.makeText(CreateActivity.this, "일정추가 실패", Toast.LENGTH_SHORT).show();
+                CreateContent = et_content.getText().toString();
+                if (CreateContent.isEmpty() || CreateCategory==null){
+                    Toast.makeText(CreateActivity.this, "현재 빈값이 존재합니다.", Toast.LENGTH_SHORT).show();
+                }else{
+                    ScheduleClass schedule = new ScheduleClass(
+                            CreateContent,
+                            CreateCategory,
+                            CreateDataYear,
+                            CreateDataMonth,
+                            CreateDataDay,
+                            null);
 
+                    Call<ScheduleClass> call = service.createSchedule(schedule);
+                    call.enqueue(new Callback<ScheduleClass>() {
+                        @Override
+                        public void onResponse(Call<ScheduleClass> call, Response<ScheduleClass> response) {
+                            if (response.isSuccessful()){
+                                Intent intent1 = new Intent();
+                                setResult(RESULT_OK,intent1);
+                                finish();
+                            }else{
+                                Toast.makeText(CreateActivity.this, "일정추가 실패", Toast.LENGTH_SHORT).show();
+                            }
                         }
-                    }
-
-                    @Override
-                    public void onFailure(Call<ScheduleClass> call, Throwable t) {
-                        Log.v("onFailure",t.getMessage());
-                    }
-                });
+                        @Override
+                        public void onFailure(Call<ScheduleClass> call, Throwable t) {
+                            Log.v("onFailure",t.getMessage());
+                        }
+                    });
+                }
             }
-        }
-     });    //CREATE_DATA
+        });    //CREATE_DATA
 
-• 일정이 추가되면 메인화면으로 넘어가서 추가된 일정을 **displayData()** 함수가 실행이 된다. 
+• 일정이 추가되면 메인화면으로 넘어가서 추가된 일정을 **displayData()** 함수통해 메인에서 화면하단에 표시가 된다. 
 
 • **displayData()** 함수가 실행이 되면 서버쪽으로 데이터를 다시 가지고 온 다음에 어뎁터로 전달해준다.
+
+_**• MainActivity**_
 
     launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
             result ->{
@@ -212,6 +224,8 @@
 
 • _**만약에 사용자가 카테고리를 선택하지 않았거나, 일정내용을 적지 않았다면 "현제 빈 값이 존재합니다." 라고 경고문(Toast)이 뜬다**_
 
+_**• CreateActivity**_
+
     content = et_content.getText().toString();
         if (content.isEmpty() || selected_category==null){
             Toast.makeText(CreateActivity.this, "현재 빈값이 존재합니다.", Toast.LENGTH_SHORT).show();
@@ -225,6 +239,8 @@
 
 
 • 이때 하단의 일정은 리사이클러뷰(MyRvAdapter)로 통해서 표시되기 때문에 **대화창이 화면에 표시되는 코드는 **MyRvAdapter** 에 있다**.
+
+_**• MyRvAdapter**_
    
     ...
     holder.tv_category.setOnClickListener(new View.OnClickListener() {
@@ -271,24 +287,20 @@
                 }
             });
 
-• 수정화면으로 넘어가면서 해당 일정의 내용과 카테고리정보... 등이 **EditActivity** 쪽으로 넘어간다.
+• 수정화면으로 넘어가면서 해당 일정의 객체 데이터가 **EditActivity** 쪽으로 넘어간다.
 
 **_• EditActivity_**
 
-    //INTENT-By RecyclerView
+    //INTENT - By RecyclerView
     Intent intent = getIntent();
-    String content = intent.getStringExtra("EContent");
-    String category = intent.getStringExtra("ECategory");
-
-
-    //DateData(Int)
-    year = intent.getIntExtra("year",0);
-    month = intent.getIntExtra("month",0);
-    day = intent.getIntExtra("day",0);
+    schedule = (ScheduleClass) intent.getSerializableExtra("schedule");
 
 ![edit_display](https://github.com/user-attachments/assets/9c0ae132-3a6e-4bcc-9111-ef6af9056663)
 
-• 수정화면으로 넘어오면 내용과 카테고리를 변경해주고 "변경하기"버튼을 누르면 성공적으로 변경이 된다.
+• 내용과 카테고리를 변경해주고 "변경하기"버튼을 누르면 **editData()** 함수를 통해 성공적으로 변경이 된다.
+
+
+**_• EditActivity_**
 
     Btn_change.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -298,26 +310,31 @@
                 if (et_content==null){
                     Toast.makeText(EditActivity.this, "빈값이 존재합니다.", Toast.LENGTH_SHORT).show();
                 }else{
+                    //Animation
                     ...
 
                     //SET_COLOR
                     Btn_back.setBackgroundColor(Color.parseColor("#FFFFFF"));
                     Btn_change.setBackgroundColor(Color.parseColor("#B2FFAF"));
 
+
                     //EditText - getText()
-                    change_content = et_content.getText().toString();
-                    
+                    EditContent = et_content.getText().toString();
+
+
                     //RadioButton_isChecked()
-                    if (rb_exercise.isChecked())    editData("운동", change_content);
-                    else if (rb_meet.isChecked())   editData("만남", change_content);
-                    else if (rb_hobby.isChecked())  editData("취미", change_content);
-                    else if (rb_rest.isChecked())   editData("여가", change_content);
-                    else if (rb_study.isChecked())  editData("공부", change_content);
+                    if (rb_exercise.isChecked())    editData("운동", EditContent);
+                    else if (rb_meet.isChecked())   editData("만남", EditContent);
+                    else if (rb_hobby.isChecked())  editData("취미", EditContent);
+                    else if (rb_rest.isChecked())   editData("여가", EditContent);
+                    else if (rb_study.isChecked())  editData("공부", EditContent);
+
                 }
             }
         });
+    }
 
-        public void editData(String c_category,String c_content){  //일정내용을 변경해주는 함수
+    public void editData(String c_category,String c_content){
         ScheduleClass newSchedule = new ScheduleClass(c_content,
                 c_category,
                 schedule.getYear(),
@@ -348,7 +365,6 @@
                 Log.v("onFailure",t.getMessage());
             }
         });
-    }
 
 • 변경하기 버튼을 누르면 서버쪽으로 **editSchedule()** 이 호출되면서 변경한 내용값을 통해 데이터의 값을 변경한다.
 
@@ -370,13 +386,16 @@
 
 _• 일정삭제코드는 adapter쪽에 있다._
 
+_**• MyRvAdapter**_
+
     Btn_d_delete.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+
             Retrofit retrofit = new Retrofit.Builder()
-                            .baseUrl("http://10.0.2.2:8080")
-                            .addConverterFactory(GsonConverterFactory.create())
-                            .build();
+                    .baseUrl("http://10.0.2.2:8080")
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
 
             service = retrofit.create(ScheduleService.class);
 
@@ -399,10 +418,290 @@ _• 일정삭제코드는 adapter쪽에 있다._
                     Log.v("onFailure",t.getMessage());
                 }
             });
+
+
         }
     });
 
 • "삭제하기"버튼을 누르면 해당 일정의 id값을 얻은 다음에 서버쪽으로 전달해서 전달받은 id값을 이용해 해당 데이터를 없앤다.
+
+# • 5. 일정조회화면과 코드설명
+
+• 하단의 "조회하기"버튼을 누르면 조회하기 화면으로 넘어간다.
+
+![ezgif-7a0507e03e9189](https://github.com/user-attachments/assets/b0255713-aff7-45e4-91ed-6611b9a8b832)
+
+• 여기서 사용자는 몇월달의 일정을 조회할건지와 어떤 일정을 조회할지 버튼(RadioButton)을 통해 선택한다.
+
+• 선택을 다 하고 난 다음에 조회하기 버튼을 누르면 일정이 아래에 표시된다.
+
+_**• SearchScheduleActivity**_
+
+    search_button.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+
+            //if--No_CONTENT
+            if (et_month.getText().toString().isEmpty() || et_year.getText().toString().isEmpty()){
+                Toast.makeText(SearchScheduleActivity.this, "빈값이 존재합니다.", Toast.LENGTH_SHORT).show();
+            }
+            else{
+                int month = Integer.parseInt(et_month.getText().toString());
+                int year = Integer.parseInt(et_year.getText().toString());
+
+                //if---Wrong Month,Year
+                if (month<1 || month>12 || et_year.getText().toString().length()!=4 || year<2000 || year>=2300){
+                    Toast.makeText(SearchScheduleActivity.this, "잘못된 요일입니다.", Toast.LENGTH_SHORT).show();
+                }
+                else {
+
+                    if (rb_search_exercise.isChecked())    Search_Schedule(year, month,"운동");
+
+                    else if (rb_search_hobby.isChecked())  Search_Schedule(year, month,"취미");
+
+                    else if (rb_search_meet.isChecked())   Search_Schedule(year, month,"만남");
+
+                    else if (rb_search_rest.isChecked())   Search_Schedule(year, month,"여가");
+
+                    else if (rb_search_study.isChecked())  Search_Schedule(year, month,"공부");
+
+                    else if(rb_search_seeAll.isChecked()) {
+                        Call<ArrayList<ScheduleClass>> call = Schedule_service.getDataListByYM(year ,month);
+                        call.enqueue(new Callback<ArrayList<ScheduleClass>>() {
+                        @Override
+                            public void onResponse(Call<ArrayList<ScheduleClass>> call, Response<ArrayList<ScheduleClass>> response) {
+                                if (response.isSuccessful()){
+                                    tv_display_category.setText(month+"월의 모든일정 목록 \uD83D\uDCCB");
+                                    Search_adapter = new SearchViewAdapter(response.body());
+                                    Search_rv.setAdapter(Search_adapter);
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<ArrayList<ScheduleClass>> call, Throwable t) {
+                                Log.v("onFailure",t.getMessage());
+                            }
+                        });
+                    }
+
+                    //RadioButton--isNotCheck
+                    else{
+                        Toast.makeText(SearchScheduleActivity.this, "선택되지 않은 카테고리가 있습니다.", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        }
+    });
+    }
+
+    public void Search_Schedule(int year, int month, String category){
+        Call<ArrayList<ScheduleClass>> call = Schedule_service.getDataListByYMC(year,month,category);
+        call.enqueue(new Callback<ArrayList<ScheduleClass>>() {
+            @Override
+            public void onResponse(Call<ArrayList<ScheduleClass>> call, Response<ArrayList<ScheduleClass>> response) {
+                if (response.isSuccessful()){
+                    Toast.makeText(SearchScheduleActivity.this, "조회 성공!", Toast.LENGTH_SHORT).show();
+
+                    tv_display_category.setText(month+"월달의 "+category+"일정 목록");
+                    Search_adapter = new SearchViewAdapter(response.body());
+                    Search_rv.setAdapter(Search_adapter);
+                }
+            }
+            @Override
+            public void onFailure(Call<ArrayList<ScheduleClass>> call, Throwable t) {
+
+            }
+    });
+ 
+• "서버쪽에서 해당 데이터를 가지고 와서 **setAdapter() (SearchViewAdapter)** 를 통해 하단에 표시해준다.
+
+![ezgif-74cdb0626ea68e](https://github.com/user-attachments/assets/64e3b3ba-b69a-4f86-8089-3add809a168e)
+
+
+• 하단의 일정을 클릭하면 대화창이 뜨고 삭제,수정이 가능하다.(삭제, 수정은 **3,4** 를 참고)
+
+_**• SearchViewAdaper**_
+
+    //onclick
+    holder.layout.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            //onclick
+            Btn_d_edit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(view.getContext(), EditActivity.class);
+
+                    intent.putExtra("EContent",content);
+                    intent.putExtra("ECategory",category);
+                    intent.putExtra("year",schedule.getYear());
+                    intent.putExtra("month",schedule.getMonth());
+                    intent.putExtra("day",schedule.getDay());
+
+                    view.getContext().startActivity(intent);
+
+                }
+            });
+            Btn_d_delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //Retrofit, Service
+                    Retrofit retrofit = new Retrofit.Builder()
+                            .baseUrl("http://10.0.2.2:8080")
+                            .addConverterFactory(GsonConverterFactory.create())
+                            .build();
+                    service = retrofit.create(ScheduleService.class);
+
+                    //Call
+                    Call<ArrayList<ScheduleClass>> call = service.deleteSchedule(schedule.getId());
+                    call.enqueue(new Callback<ArrayList<ScheduleClass>>() {
+                        @Override
+                        public void onResponse(Call<ArrayList<ScheduleClass>> call, Response<ArrayList<ScheduleClass>> response) {
+                            if (response.isSuccessful()){
+                                Toast.makeText(view.getContext(), "성공", Toast.LENGTH_SHORT).show();
+                                UpdateSearchData(response.body());
+                                dialog.dismiss();
+                            }else{
+                                Toast.makeText(view.getContext(), "실패", Toast.LENGTH_SHORT).show();
+                                dialog.dismiss();
+                            }
+                        }
+                        @Override
+                        public void onFailure(Call<ArrayList<ScheduleClass>> call, Throwable t) {
+                            Log.v("onFailure",t.getMessage());
+                        }
+                    });
+                }
+            });
+
+# • 6. ToDoList화면과 코드설명
+
+![화면 캡처 2025-03-11 165730](https://github.com/user-attachments/assets/01eafe62-0f2d-4929-a772-51c2f771ed63)
+
+• **_ToDoList_** 란? : 요일과 관계없는 일정을 추가할수 있는 화면이다.( ex)설거지하기, 장보러 갔다오기...)
+
+• "추가하기"버튼을 누르면 대화창이 뜨고 추가하려고하는 일정의 내용과 중요도를 적은 다음에 추가하기를 누르면 ToDoList에 저장이 된다.
+
+_**• ToDoActivity**_
+
+    //Button - onclick
+        Btn_add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //ANIMATION
+                ...
+
+                //Dialog 설정 및 생성
+                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                LayoutInflater inflater = LayoutInflater.from(view.getContext());
+                View dialog_view = inflater.inflate(R.layout.todo_dialog,null);
+                AlertDialog dialog = builder.create();
+                dialog.setView(dialog_view);
+                dialog.show();
+
+
+                //Button
+                Button add_button = dialog_view.findViewById(R.id.Btn_d_add);
+                Button cancel_button = dialog_view.findViewById(R.id.Btn_d_cancel);
+
+
+                //EditText
+                EditText et_todo_content = dialog_view.findViewById(R.id.et_todo_content);
+                EditText et_todo_importance = dialog_view.findViewById(R.id.et_todo_importance);
+
+
+                //onclick - In Dialog
+                add_button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        String ToDO_content = et_todo_content.getText().toString();
+                        String ToDo_str_importance = et_todo_importance.getText().toString();
+
+                        if (isValidInput(ToDO_content,ToDo_str_importance)){
+                            Toast.makeText(ToDoActivity.this, "잘못된 값이 존재합니다.", Toast.LENGTH_SHORT).show();
+                        }
+                         else {
+                             int ToDo_importance = Integer.parseInt(ToDo_str_importance);
+                             ToDoClass todo = new ToDoClass(ToDO_content,false,ToDo_importance,null);
+
+                             //CALL
+                             Call<ArrayList<ToDoClass>> call = ToDo_service.createToDoData(todo);
+                             call.enqueue(new Callback<ArrayList<ToDoClass>>() {
+                                 @Override
+                                 public void onResponse(Call<ArrayList<ToDoClass>> call, Response<ArrayList<ToDoClass>> response) {
+                                     if (response.isSuccessful()){
+                                         ArrayList<ToDoClass> todoList = new ArrayList<>();
+
+                                         for (int i = 0; i < response.body().size(); i++) {
+                                             if (!response.body().get(i).isAchievement()) {
+                                                 todoList.add(response.body().get(i));
+                                             }
+                                         }
+                                         ToDo_adapter.UpdateData(todoList);
+                                         ToDo_rv.setAdapter(ToDo_adapter);
+                                         dialog.dismiss();
+                                         Toast.makeText(ToDoActivity.this, "추가 성공", Toast.LENGTH_SHORT).show();
+                                     }else{
+                                         Toast.makeText(ToDoActivity.this, "서버와의 연결 실패", Toast.LENGTH_SHORT).show();
+                                     }
+                                 }
+                                 @Override
+                                 public void onFailure(Call<ArrayList<ToDoClass>> call, Throwable t) {
+                                     Log.v("onFailure",t.getMessage());
+                                 }
+                             });
+                         }
+                    }
+                });
+
+![ezgif-55499eb94f2e15](https://github.com/user-attachments/assets/7327bb00-5170-4668-a9a9-c8a96fd61add)
+
+• "추가"를 누르면 서버쪽으로 **createToDoData()** 가 호출이 되면서 DB에 저장이 된다.
+
+• 일정을 끝냈다면 해당일정을 클릭하면 "완료된 일정"으로 넘어가면서 **ToDoData의 isAchievement값이 false-->true** 로 바뀐다.
+
+• 그리고 하단의 새로고침버튼(🔁)을 누르면 완료한 일정이 하단에 표시가 된다.
+
+_**• ToDoActivity**_
+
+    Btn_refresh.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+                ...
+
+            //CALL - getToDoData
+            Call<ArrayList<ToDoClass>> call = service.getToDoData();
+            call.enqueue(new Callback<ArrayList<ToDoClass>>() {
+                @Override
+                public void onResponse(Call<ArrayList<ToDoClass>> call, Response<ArrayList<ToDoClass>> response) {
+                    ArrayList<ToDoClass> success_list = new ArrayList<>();
+
+                    //for -- 일정이 완료된 데이터만
+                    for (int i = 0; i < response.body().size(); i++) {
+                        if (response.body().get(i).isAchievement()){
+                        success_list.add(response.body().get(i));
+                        }
+                    }
+
+                    //RecyclerView, Adapter 설정 및 생성
+                    ToDoFinishRvAdapter finish_adapter = new ToDoFinishRvAdapter(success_list);
+                    rv_finished_todo.setAdapter(finish_adapter);
+                }
+
+                @Override
+                public void onFailure(Call<ArrayList<ToDoClass>> call, Throwable t) {
+                    Log.v("onFailure",t.getMessage());
+                }
+            });
+
+        }
+    });
+
+![ezgif-5c7f4a939e48f7](https://github.com/user-attachments/assets/1a3d0fa6-08ff-4a91-a4dd-6d22c4d34822)
+
+_**• DB**_
+
+![image](https://github.com/user-attachments/assets/f936d3d0-8d12-4296-a72e-df27f8a5c18a)
 
 
 
