@@ -736,7 +736,7 @@ _**• DB**_
 
 • 데이터를 수정하고 삭제하는 요청코드를 작성하던도중 전달값을 year,month,day로 전달해서 만약 중복된 일정중 하나를 Edit,Delete하게 되면 두개의 데이터가 동시에 지워지는 문제점이 발생함
 
---> **id값을 클래스에 추가해서 "id"를 통해 해당데이터를 수정,삭제하로고 변경** --> **중복된 일정이 있어도 사용자가 선택한 일정만 지워진다.**
+--> **id값을 클래스에 추가해서 "id"를 통해 해당데이터를 수정,삭제하도고 변경** --> **중복된 일정이 있어도 사용자가 선택한 일정만 지워진다.**
 
     public class ScheduleClass implements Serializable {               public class ToDoClass implements Serializable {
         private String content;                                            private String todo_content;   
