@@ -34,7 +34,7 @@
 
 # • 1. 메인 화면과 코드설명
 
-![main_display](https://github.com/user-attachments/assets/e2c6e7e4-caf3-49a7-8a0f-52959996dd57)
+![메인화면](https://github.com/user-attachments/assets/86f7536c-8fb7-4115-9b00-94f55687bc65)
 
 **달력📅**
 
@@ -92,7 +92,7 @@
 
 ⬇️
 
-![화면 캡처 2025-03-06 112859](https://github.com/user-attachments/assets/f721e778-a111-4a2d-942f-2491fbd3528d)
+![화면 캡처 2025-03-12 144011](https://github.com/user-attachments/assets/59f0171a-fca9-4d5a-b103-2b0a71fed6d1)
 
 • 하단의 **'추가하기'** 와 **'조회하기'** 버튼은 2,5에서 설명할 예정이다.
 
