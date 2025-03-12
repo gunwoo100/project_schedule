@@ -25,7 +25,9 @@
 
 **• 6. ToDoList화면과 코드설명**
 
-**• 7. 어려웠던 부분**
+**• 7. 그 외의 기능들**
+
+**• 8. 어려웠던 부분**
 
 **• 마무리**
 
@@ -705,6 +707,51 @@ _**• ToDoActivity**_
 _**• DB**_
 
 ![image](https://github.com/user-attachments/assets/f936d3d0-8d12-4296-a72e-df27f8a5c18a)
+
+# • 7. 그 외의 기능들
+
+• 버튼 애니메이션및 색상 변경
+
+![ezgif-18a6cec22cc1b6](https://github.com/user-attachments/assets/6ac47b91-f129-43e2-af61-ce8ddd1fab5c)
+
+    //ANIMATION
+        {
+        // 커지는 애니메이션 생성
+        ScaleAnimation scaleUp = new ScaleAnimation(
+        1f, 1.5f, // X축 크기: 1배에서 1.5배
+        1f, 1.5f, // Y축 크기: 1배에서 1.5배로
+        ScaleAnimation.RELATIVE_TO_SELF, 0.5f, // 기준점을 뷰의 중심으로 설정
+        ScaleAnimation.RELATIVE_TO_SELF, 0.5f);
+        scaleUp.setDuration(700);  // 0.5초 동안 커짐
+        scaleUp.setFillAfter(true); // 애니메이션 후 최종 상태 유지
+
+        // 작아지는 애니메이션 생성
+        ScaleAnimation scaleDown = new ScaleAnimation(
+        1.4f, 1f, // X축 크기: 1.5배에서 1배로
+        1.4f, 1f, // Y축 크기: 1.5배에서 1배로
+        ScaleAnimation.RELATIVE_TO_SELF, 0.5f, // 기준점을 뷰의 중심으로 설정
+        ScaleAnimation.RELATIVE_TO_SELF, 0.5f);
+        scaleDown.setDuration(400);  // 0.3초 동안 작아짐
+        scaleDown.setFillAfter(true); // 애니메이션 후 최종 상태 유지
+
+        // 애니메이션을 순차적으로 실행
+        Btn_create.startAnimation(scaleUp);
+        Btn_create.startAnimation(scaleDown);
+        }
+
+
+•오늘 날짜 표시
+
+![화면 캡처 2025-03-12 121841](https://github.com/user-attachments/assets/b026d672-62ce-41ad-b20a-47fad448df44)
+
+    //DAY_DISPLAY(오늘 날짜 표시)
+        {
+            Date today = new Date();
+            SimpleDateFormat format = new SimpleDateFormat("•MM/dd/EEE",getResources().getConfiguration().locale);
+            String test = format.format(today);
+            tv_day.setText(test);
+        }
+
 
 # • 8. 어려웠던 부분
 
