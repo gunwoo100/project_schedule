@@ -8,7 +8,7 @@
 
 **--담당역활 📅  : 일정추가, 수정, 삭제, 조회, TODO_List  [화면 5개, DB 2개]**
 
-**--사용한 기능 : 안드로이드, 자바, postgresql(DataBase)**
+**--사용한 기능 : 안드로이드, 자바, postgresql(DataBase), SpringBoot**
 
 
 ## 목차
