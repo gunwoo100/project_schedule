@@ -92,7 +92,8 @@
 
 ⬇️
 
-![화면 캡처 2025-03-12 144011](https://github.com/user-attachments/assets/59f0171a-fca9-4d5a-b103-2b0a71fed6d1)
+![화면 캡처 2025-03-12 144107](https://github.com/user-attachments/assets/840be884-633c-468a-abb8-a5fc59036202)
+
 
 • 하단의 **'추가하기'** 와 **'조회하기'** 버튼은 2,5에서 설명할 예정이다.
 
@@ -144,7 +145,7 @@ _**• MainActivity**_
 
 ![ezgif-6bceb3770a4d38](https://github.com/user-attachments/assets/8f39343f-7a28-49b7-ac92-d52782a8e40a) -->
 ![ezgif-6360f2c53e7647](https://github.com/user-attachments/assets/ad62dd5e-fe89-48a1-b05c-8170e0373f2e) -->
-![ezgif-673dc6fc5bc7e6](https://github.com/user-attachments/assets/e3bd467e-dd64-414a-8327-74ed79bfab73)
+![ezgif-78759b34071a82](https://github.com/user-attachments/assets/f058d5d3-293e-4044-9244-a017c0214ae2)
 
 •"추가하기"버튼을 누르면 서버쪽으로 **createSchedule()** 이 호출되면서 DB로 저장이 된다.
 
@@ -239,7 +240,7 @@ _**• CreateActivity**_
 
 • 우선 일정을 수정할려면 메인화면에서 하단의 일정중 수정,삭제하고 싶은 일정을 누른 다음, 대화창이 뜨면 "수정하기"버튼을 누르면 수정화면으로 이동한다.
 
-![ezgif-1456d6d5dbd58e](https://github.com/user-attachments/assets/7f7fb4ab-0983-484a-956f-3190c1c151e4)
+![ezgif-7fdb6fbe4cce1f](https://github.com/user-attachments/assets/d58fcc46-7043-48d4-a4b1-dd6a849d0b02)
 
 
 • 이때 하단의 일정은 리사이클러뷰(MyRvAdapter)로 통해서 표시되기 때문에 **대화창이 화면에 표시되는 코드는 **MyRvAdapter** 에 있다**.
@@ -378,7 +379,7 @@ _**• MyRvAdapter**_
         Toast.makeText(EditActivity.this, "빈값이 존재합니다.", Toast.LENGTH_SHORT).show();
     }
 
-![ezgif-5c7233e37bbfc8](https://github.com/user-attachments/assets/7f94fc64-aaaa-4aa4-b06d-f624ec0ae4ee)
+![ezgif-7b9a05772f53f6](https://github.com/user-attachments/assets/281536ca-ef4a-4957-9973-b19e7218b877)
 
 # • 4. 일정 삭제화면과 코드설명
 
@@ -386,7 +387,7 @@ _**• MyRvAdapter**_
 
 그런 다음에 "삭제하기" 버튼을 누르면 성공적으로 삭제가 된다.
 
-![ezgif-5c20cc00c6fbec](https://github.com/user-attachments/assets/c6487021-5e64-4828-be78-cd35b9d10e68)
+![ezgif-7d0f7af42bc48e](https://github.com/user-attachments/assets/ff01f2e0-9218-48f4-bda3-24ffba4064a0)
 
 _• 일정삭제코드는 adapter쪽에 있다._
 
@@ -433,7 +434,7 @@ _**• MyRvAdapter**_
 
 • 하단의 "조회하기"버튼을 누르면 조회하기 화면으로 넘어간다.
 
-![ezgif-7a0507e03e9189](https://github.com/user-attachments/assets/b0255713-aff7-45e4-91ed-6611b9a8b832)
+![ezgif-7d6c73bc823dce](https://github.com/user-attachments/assets/8d5248df-88e9-4f98-be91-eac4f3be980b)
 
 • 여기서 사용자는 몇월달의 일정을 조회할건지와 어떤 일정을 조회할지 버튼(RadioButton)을 통해 선택한다.
 
@@ -519,7 +520,7 @@ _**• SearchScheduleActivity**_
  
 • "서버쪽에서 해당 데이터를 가지고 와서 **setAdapter() (SearchViewAdapter)** 를 통해 하단에 표시해준다.
 
-![ezgif-74cdb0626ea68e](https://github.com/user-attachments/assets/64e3b3ba-b69a-4f86-8089-3add809a168e)
+![ezgif-7b14531675b653](https://github.com/user-attachments/assets/225da82c-0c56-4672-b23c-b30475cbaf70)
 
 
 • 하단의 일정을 클릭하면 대화창이 뜨고 삭제,수정이 가능하다.(삭제, 수정은 **3,4** 를 참고)
