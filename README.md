@@ -31,6 +31,8 @@
 
 **• 마무리**
 
+<br>
+<br>
 
 # • 1. 메인 화면과 코드설명
 
@@ -94,8 +96,10 @@
 
 ![화면 캡처 2025-03-12 144107](https://github.com/user-attachments/assets/840be884-633c-468a-abb8-a5fc59036202)
 
-
 • 하단의 **'추가하기'** 와 **'조회하기'** 버튼은 2,5에서 설명할 예정이다.
+
+<br>
+<br>
 
 # • 2. 일정생성화면과 코드설명
 
@@ -235,6 +239,9 @@ _**• CreateActivity**_
         if (content.isEmpty() || selected_category==null){
             Toast.makeText(CreateActivity.this, "현재 빈값이 존재합니다.", Toast.LENGTH_SHORT).show();
             }
+            
+<br>
+<br>
 
 # • 3. 일정수정화면과 코드설명
 
@@ -381,6 +388,9 @@ _**• MyRvAdapter**_
 
 ![ezgif-7b9a05772f53f6](https://github.com/user-attachments/assets/281536ca-ef4a-4957-9973-b19e7218b877)
 
+<br>
+<br>
+
 # • 4. 일정 삭제화면과 코드설명
 
 • 일정을 삭제하려면 메인화면에서 하단의 일정중 삭제하고 싶은 일정을 클릭하면 대화상자가 나온다.
@@ -429,6 +439,9 @@ _**• MyRvAdapter**_
     });
 
 • "삭제하기"버튼을 누르면 해당 일정의 id값을 얻은 다음에 서버쪽으로 전달해서 전달받은 id값을 이용해 해당 데이터를 없앤다.
+
+<br>
+<br>
 
 # • 5. 일정조회화면과 코드설명
 
@@ -581,6 +594,9 @@ _**• SearchViewAdaper**_
 
 # • 6. ToDoList화면과 코드설명
 
+<br>
+<br>
+
 ![화면 캡처 2025-03-12 103346](https://github.com/user-attachments/assets/b0ca22d9-d6fd-41f5-b92f-326a27088cb8)
 
 
@@ -709,6 +725,9 @@ _**• DB**_
 
 ![image](https://github.com/user-attachments/assets/f936d3d0-8d12-4296-a72e-df27f8a5c18a)
 
+<br>
+<br>
+
 # • 7. 그 외의 기능들
 
 • 버튼 애니메이션및 색상 변경
@@ -753,25 +772,34 @@ _**• DB**_
             tv_day.setText(test);
         }
 
+<br>
+<br>
 
-# • 8. 어려웠던 부분
+# • 8. 최종 앱 실행 영상
 
-**• 1. 엑티비티 화면 구성**
+https://github.com/user-attachments/assets/37db5592-ab38-4402-b436-7e9ed6485b70
 
-• 일정관리앱의 액티비티 화면과 ui배치는 각각 어떻게 해야 할지 잘 몰랐었고, 막상 만들어도 다시 수정하는 경우가 몇번 있어서 서버 구현하는 것보다 시간이 오래 걸렸다.
+<br>
+<br>
 
-**• 2. 코드정리**
+# • 9. 어려웠던 부분
 
-• ToDo화면 기능과 조회 기능을 만드는 과정에서 코드가 생각보다 복잡했고 변수명의 중복과 이름을 짓는데 어려움을 겪었다.
+**• 엑티비티 화면 구성**
+
+일정관리앱의 액티비티 화면과 ui배치는 각각 어떻게 해야 할지 잘 몰랐었고, 막상 만들어도 다시 수정하는 경우가 몇번 있어서 서버 구현하는 것보다 시간이 오래 걸렸다.
+
+**• 코드정리**
+
+ToDo화면 기능과 조회 기능을 만드는 과정에서 코드가 생각보다 복잡했고 변수명의 중복과 이름을 짓는데 어려움을 겪었다.
 
 --> **액티비티 화면의 이름과 연관지어서 변수명을 지었고, 최대한 사용하지 않는 변수는 지우면서 코드를 정리했다**.  --> **전의 코트보다 가독성 ↑**
 
     //EditText - getText()
         EditContent = et_content.getText().toString();
 
-**• 3. 2개의 RecyclerView활용**
+**• 2개의 RecyclerView활용**
 
-• TodO화면에서 'ToDo일정'과 하단의 '완료된 일정'은 둘다 rv에 해당된다. 원래는 사용자가 'ToDo일정'에서 일정을 클릭하면 바로 '완료된 일정'에 표시되는 기능을 구현하려고 했지만 두가지 동시해 화면에 표시하려고  하니까 어떻게 해야 될지 감이 잡히지 않았다.
+TodO화면에서 'ToDo일정'과 하단의 '완료된 일정'은 둘다 rv에 해당된다. 원래는 사용자가 'ToDo일정'에서 일정을 클릭하면 바로 '완료된 일정'에 표시되는 기능을 구현하려고 했지만 두가지 동시해 화면에 표시하려고  하니까 어떻게 해야 될지 감이 잡히지 않았다.
 
 --> **'새로고침버튼'을 추가해서 adapter의 값을 버튼을 누를때마다 Update()를 통해 데이터가 변경되면서 화면에 표시하는 기능으로 변경** -->**성공**
 
@@ -779,11 +807,12 @@ _**• DB**_
         @Override
         public void onClick(View view) {...
 
-![화면 캡처 2025-03-11 173004](https://github.com/user-attachments/assets/8e0a3f08-1094-4f18-afb1-8ed5f8735e13)  ---->  ![화면 캡처 2025-03-11 173429](https://github.com/user-attachments/assets/45675852-1236-4097-8251-7e4bf3d73e47)
+![화면 캡처 2025-03-11 173004](https://github.com/user-attachments/assets/8e0a3f08-1094-4f18-afb1-8ed5f8735e13)  ![화면_캡처_2025-03-12_153348-removebg-preview](https://github.com/user-attachments/assets/4e4d4fa5-3865-47c0-b50f-0ba0915d4b09)
+ ![화면 캡처 2025-03-11 173429](https://github.com/user-attachments/assets/45675852-1236-4097-8251-7e4bf3d73e47)
 
-**• 4. HTTP 중 Edit,Delete 코드 구현**
+**• HTTP 중 Edit,Delete 코드 구현**
 
-• 데이터를 수정하고 삭제하는 요청코드를 작성하던도중 전달값을 year,month,day로 전달해서 만약 중복된 일정중 하나를 Edit,Delete하게 되면 두개의 데이터가 동시에 지워지는 문제점이 발생함
+데이터를 수정하고 삭제하는 요청코드를 작성하던도중 전달값을 year,month,day로 전달해서 만약 중복된 일정중 하나를 Edit,Delete하게 되면 두개의 데이터가 동시에 지워지는 문제점이 발생함
 
 --> **id값을 클래스에 추가해서 "id"를 통해 해당데이터를 수정,삭제하도고 변경** --> **중복된 일정이 있어도 사용자가 선택한 일정만 지워진다.**
 
