@@ -578,7 +578,8 @@ _**• SearchViewAdaper**_
 
 # • 6. ToDoList화면과 코드설명
 
-![화면 캡처 2025-03-11 165730](https://github.com/user-attachments/assets/01eafe62-0f2d-4929-a772-51c2f771ed63)
+![화면 캡처 2025-03-12 103346](https://github.com/user-attachments/assets/b0ca22d9-d6fd-41f5-b92f-326a27088cb8)
+
 
 • **_ToDoList_** 란? : 요일과 관계없는 일정을 추가할수 있는 화면이다.( ex)설거지하기, 장보러 갔다오기...)
 
