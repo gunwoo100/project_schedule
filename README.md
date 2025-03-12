@@ -794,8 +794,8 @@ ToDo화면 기능과 조회 기능을 만드는 과정에서 코드가 생각보
 
 --> **액티비티 화면의 이름과 연관지어서 변수명을 지었고, 최대한 사용하지 않는 변수는 지우면서 코드를 정리했다**.  --> **전의 코트보다 가독성 ↑**
 
-    //EditText - getText()
-        EditContent = et_content.getText().toString();
+    //EditText
+        EditText et_todo_content = dialog_view.findViewById(R.id.et_todo_content);
 
 **• 2개의 RecyclerView활용**
 
