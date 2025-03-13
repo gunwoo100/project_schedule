@@ -455,61 +455,64 @@ _**• MyRvAdapter**_
 
 _**• SearchScheduleActivity**_
 
-    search_button.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
+        search_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
-            //if--No_CONTENT
-            if (et_month.getText().toString().isEmpty() || et_year.getText().toString().isEmpty()){
-                Toast.makeText(SearchScheduleActivity.this, "빈값이 존재합니다.", Toast.LENGTH_SHORT).show();
-            }
-            else{
-                int month = Integer.parseInt(et_month.getText().toString());
-                int year = Integer.parseInt(et_year.getText().toString());
-
-                //if---Wrong Month,Year
-                if (month<1 || month>12 || et_year.getText().toString().length()!=4 || year<2000 || year>=2300){
-                    Toast.makeText(SearchScheduleActivity.this, "잘못된 요일입니다.", Toast.LENGTH_SHORT).show();
+                //if--No_CONTENT
+                if (et_month.getText().toString().isEmpty() || et_year.getText().toString().isEmpty()){
+                    Toast.makeText(SearchScheduleActivity.this, "빈값이 존재합니다.", Toast.LENGTH_SHORT).show();
                 }
-                else {
+                else{
+                    int month = Integer.parseInt(et_month.getText().toString());
+                    int year = Integer.parseInt(et_year.getText().toString());
+                
+                    //if---Wrong Month,Year
+                    if (month<1 || month>12 || et_year.getText().toString().length()!=4 || year<2000 || year>=2300){
+                        Toast.makeText(SearchScheduleActivity.this, "잘못된 요일입니다.", Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        //ANIMATION
+                        ...
 
-                    if (rb_search_exercise.isChecked())    Search_Schedule(year, month,"운동");
+                        if (rb_search_exercise.isChecked())    Search_Schedule(year, month,"운동");
+                    
+                        else if (rb_search_hobby.isChecked())  Search_Schedule(year, month,"취미");
 
-                    else if (rb_search_hobby.isChecked())  Search_Schedule(year, month,"취미");
+                        else if (rb_search_meet.isChecked())   Search_Schedule(year, month,"만남");
 
-                    else if (rb_search_meet.isChecked())   Search_Schedule(year, month,"만남");
+                        else if (rb_search_rest.isChecked())   Search_Schedule(year, month,"여가");
 
-                    else if (rb_search_rest.isChecked())   Search_Schedule(year, month,"여가");
+                        else if (rb_search_study.isChecked())  Search_Schedule(year, month,"공부");
 
-                    else if (rb_search_study.isChecked())  Search_Schedule(year, month,"공부");
-
-                    else if(rb_search_seeAll.isChecked()) {
-                        Call<ArrayList<ScheduleClass>> call = Schedule_service.getDataListByYM(year ,month);
-                        call.enqueue(new Callback<ArrayList<ScheduleClass>>() {
-                        @Override
-                            public void onResponse(Call<ArrayList<ScheduleClass>> call, Response<ArrayList<ScheduleClass>> response) {
-                                if (response.isSuccessful()){
-                                    tv_display_category.setText(month+"월의 모든일정 목록 \uD83D\uDCCB");
-                                    Search_adapter = new SearchViewAdapter(response.body());
-                                    Search_rv.setAdapter(Search_adapter);
+                        else if(rb_search_seeAll.isChecked()) {
+                            Call<ArrayList<ScheduleClass>> call = Schedule_service.getDataListByYM(year ,month);
+                            call.enqueue(new Callback<ArrayList<ScheduleClass>>() {
+                                @Override
+                                public void onResponse(Call<ArrayList<ScheduleClass>> call, Response<ArrayList<ScheduleClass>> response) {
+                                    if (response.isSuccessful()){
+                                        tv_display_category.setText(year+"년 "+month+"월의 모든일정 목록 \uD83D\uDCCB");
+                                        Search_adapter = new SearchViewAdapter(response.body());
+                                        Search_rv.setAdapter(Search_adapter);
+                                    }
                                 }
-                            }
-
-                            @Override
-                            public void onFailure(Call<ArrayList<ScheduleClass>> call, Throwable t) {
-                                Log.v("onFailure",t.getMessage());
-                            }
-                        });
-                    }
-
-                    //RadioButton--isNotCheck
-                    else{
-                        Toast.makeText(SearchScheduleActivity.this, "선택되지 않은 카테고리가 있습니다.", Toast.LENGTH_SHORT).show();
+    
+                                @Override
+                                public void onFailure(Call<ArrayList<ScheduleClass>> call, Throwable t) {
+                                    Log.v("onFailure",t.getMessage());
+                                }
+                            });
+                        }
+                
+                        //RadioButton--isNotCheck
+                        else{
+                            Toast.makeText(SearchScheduleActivity.this, "선택되지 않은 카테고리가 있습니다.", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
             }
-        }
-    });
+        });
+
     }
 
     public void Search_Schedule(int year, int month, String category){
@@ -518,9 +521,10 @@ _**• SearchScheduleActivity**_
             @Override
             public void onResponse(Call<ArrayList<ScheduleClass>> call, Response<ArrayList<ScheduleClass>> response) {
                 if (response.isSuccessful()){
+                    Log.v("TESTTAGYEAR",year+"");
                     Toast.makeText(SearchScheduleActivity.this, "조회 성공!", Toast.LENGTH_SHORT).show();
 
-                    tv_display_category.setText(month+"월달의 "+category+"일정 목록");
+                    tv_display_category.setText(year+"년 "+month+"월달의 "+category+"일정 목록");
                     Search_adapter = new SearchViewAdapter(response.body());
                     Search_rv.setAdapter(Search_adapter);
                 }
@@ -529,7 +533,9 @@ _**• SearchScheduleActivity**_
             public void onFailure(Call<ArrayList<ScheduleClass>> call, Throwable t) {
 
             }
-    });
+
+        });
+    }
  
 • "서버쪽에서 해당 데이터를 가지고 와서 **setAdapter() (SearchViewAdapter)** 를 통해 하단에 표시해준다.
 
@@ -725,6 +731,84 @@ _**• DB**_
 
 ![image](https://github.com/user-attachments/assets/f936d3d0-8d12-4296-a72e-df27f8a5c18a)
 
+• 하단의 완료된 일정을 누르면 대화창이 뜨면서 해당 일정을 삭제할 수 있다.
+
+    holder.layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //AlertDialog 생성 및 설정
+                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                LayoutInflater inflater = LayoutInflater.from(view.getContext());
+                View dialogView = inflater.inflate(R.layout.dialog_f_todo_delete,null);
+                builder.setView(dialogView);
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
+                Button Btn_delete = dialogView.findViewById(R.id.f_todo_btn_delete);
+                Button Btn_cancel = dialogView.findViewById(R.id.f_todo_btn_cancel);
+
+                TextView tv_ToDo_content = dialogView.findViewById(R.id.tv_d_todo_content);
+                TextView tv_ToDo_importance = dialogView.findViewById(R.id.tv_d_todo_importance);
+
+                String todo_content = data.get(holder.getAdapterPosition()).getTodo_content();
+                int todo_importance = data.get(holder.getAdapterPosition()).getImportance();
+
+
+                tv_ToDo_content.setText(todo_content);
+                tv_ToDo_importance.setText(todo_importance+" 점");
+
+                Btn_delete.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Long delete_ToDoId = data.get(holder.getAdapterPosition()).getTodo_id();
+
+                        //Retrofit,Service
+                        Retrofit retrofit = new Retrofit.Builder()
+                                .baseUrl("http://10.0.2.2:8080")
+                                .addConverterFactory(GsonConverterFactory.create())
+                                .build();
+                        ToDoService service = retrofit.create(ToDoService.class);
+
+                        service.deleteToDoData(delete_ToDoId).enqueue(new Callback<ArrayList<ToDoClass>>() {
+                            @Override
+                            public void onResponse(Call<ArrayList<ToDoClass>> call, Response<ArrayList<ToDoClass>> response) {
+                                if (response.isSuccessful()){
+                                    ArrayList<ToDoClass> list = new ArrayList<>();
+                                    for (int i = 0; i < response.body().size(); i++) {
+                                        if (response.body().get(i).isAchievement()){
+                                            ToDoClass data = response.body().get(i);
+                                            list.add(data);
+                                        }
+                                    }
+
+                                    updateData(list);
+                                    notifyDataSetChanged();
+                                    Toast.makeText(view.getContext(), "삭제가 완료되었습니다.", Toast.LENGTH_SHORT).show();
+                                    dialog.dismiss();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<ArrayList<ToDoClass>> call, Throwable t) {
+                                Log.v("onFailure_ToDoFinishRvAdapter",t.getMessage());
+                            }
+                        });
+                    }
+                });
+                Btn_cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+                });
+
+
+            }
+        });
+
+![ezgif-7ccec54039de72](https://github.com/user-attachments/assets/5f290c3c-4676-4599-b0ed-7cbb58ede61f)
+
+
 <br>
 <br>
 
@@ -777,7 +861,8 @@ _**• DB**_
 
 # • 8. 최종 앱 실행 영상
 
-https://github.com/user-attachments/assets/37db5592-ab38-4402-b436-7e9ed6485b70
+https://github.com/user-attachments/assets/2b3d5607-9517-4b6f-8fdd-e0ac39d1ecdf
+
 
 <br>
 <br>
