@@ -36,7 +36,8 @@
 
 # • 1. 메인 화면과 코드설명
 
-![메인화면](https://github.com/user-attachments/assets/86f7536c-8fb7-4115-9b00-94f55687bc65)
+![메인화면](https://github.com/user-attachments/assets/86f7536c-8fb7-4115-9b00-94f55687bc65)   ![0313 메인 화면 사진추가](https://github.com/user-attachments/assets/dbb19913-7755-4366-9362-9de1c363a0b9)
+
 
 **달력📅**
 
@@ -47,33 +48,52 @@
         calendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView calendarView, int year, int month, int day) {
-                String date = year+"-"+(month+1)+"-"+day;
-                Toast.makeText(MainActivity.this, date, Toast.LENGTH_SHORT).show();
-                date_day = day;
-                date_month = month+1; //월은 0월부터 시작함
-                date_year = year;
+                selected_day = day;
+                selected_month = month+1; //월은 0월부터 시작함
+                selected_year = year;
 
-                Call<ArrayList<ScheduleClass>> call = service.getDataListByYMD(date_year,date_month,date_day);
-                call.enqueue(new Callback<ArrayList<ScheduleClass>>() {
-                    @Override
-                    public void onResponse(Call<ArrayList<ScheduleClass>> call, Response<ArrayList<ScheduleClass>> response) {
-                        if (response.isSuccessful()){
-                            ArrayList<ScheduleClass> list = response.body();
-                            adapter = new MyRvAdapter(list,date_year,date_month,date_day);
-                            rv.setAdapter(adapter);
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<ArrayList<ScheduleClass>> call, Throwable t) {
-                        Log.v("onFailure2",t.getMessage());
-                    }
-                });
+                displayData(selected_year,selected_month,selected_day);
 
             }
         });
 
-• 달력에서 요일을 누르면 서버쪽에서 그 날짜에 사용자가 추가한 일정데이터를 **getDataListByYMD()** 통해 서버쪽에 호출해서 값을 얻어온다.
+    //User Defined Function
+    public void displayData(int year,int month,int day){
+        Call<ArrayList<ScheduleClass>> call = service.getDataListByYMD(year, month, day);
+        call.enqueue(new Callback<ArrayList<ScheduleClass>>() {
+            @Override
+            public void onResponse(Call<ArrayList<ScheduleClass>> call, Response<ArrayList<ScheduleClass>> response) {
+                if (response.isSuccessful()){
+                    if (response.body().isEmpty()){
+                        sad_image.setVisibility(View.VISIBLE);
+                        tv_noSchedule.setVisibility(View.VISIBLE);
+                        tv_noSchedule.setText(year+"년 "+month+"월 "+day+"일의 일정이 없습니다.");
+                    }
+                    else{
+                        sad_image.setVisibility(View.GONE);
+                        tv_noSchedule.setVisibility(View.GONE);
+                    }
+                    Log.v("TAG#",response.isSuccessful()+"");
+                    adapter = new MainRvAdapter(response.body());
+                    rv.setAdapter(adapter);
+                    tv_display_date.setText(year+"/"+month+"/"+day+"의 일정");
+
+                }
+                else{
+                    Toast.makeText(MainActivity.this, "서버와의 연결 실패", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<ScheduleClass>> call, Throwable t) {
+                //Log.v("onFailure_Main",t.getMessage());
+                Toast.makeText(MainActivity.this, "서버와의 연결 실패", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }    
+
+• 달력에서 요일을 누르면 **displayDate()** 함수가 실행이 된다. displayDate()함수에서는 서버에서 해당날짜의 일정데이터를 가지고 오고 <br>
+  만약 데이터 값이 빈값이면 사진과 텍스트 문구가 화면에 표시된다.
 
 • 얻어온 값은 **MyRvAdapter**로 전달하고 **MyRvAdapter**에서는 **bindViewHolder, createViewHolder**...에 의해서 받아온 값이 하단에 표시가 된다.
 
@@ -603,7 +623,7 @@ _**• SearchViewAdaper**_
 <br>
 <br>
 
-![화면 캡처 2025-03-12 103346](https://github.com/user-attachments/assets/b0ca22d9-d6fd-41f5-b92f-326a27088cb8)
+![화면 캡처 2025-03-13 175447](https://github.com/user-attachments/assets/36e7814a-77bf-4a33-bc99-ffdd3d383d68)   ![0313 ToDo화면에 사진추가](https://github.com/user-attachments/assets/a2ed75db-7f46-4600-ab2d-6482dfddfdc7)
 
 
 • **_ToDoList_** 란? : 요일과 관계없는 일정을 추가할수 있는 화면이다.( ex)설거지하기, 장보러 갔다오기...)
@@ -614,61 +634,37 @@ _**• SearchViewAdaper**_
 
 _**• ToDoActivity**_
 
-    //Button - onclick
-        Btn_add.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //ANIMATION
-                ...
+    //onclick - In Dialog
+        add_button.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+        String ToDO_content = et_todo_content.getText().toString();
+        String ToDo_str_importance = et_todo_importance.getText().toString();
 
-                //Dialog 설정 및 생성
-                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
-                LayoutInflater inflater = LayoutInflater.from(view.getContext());
-                View dialog_view = inflater.inflate(R.layout.todo_dialog,null);
-                AlertDialog dialog = builder.create();
-                dialog.setView(dialog_view);
-                dialog.show();
+            if (isValidInput(ToDO_content,ToDo_str_importance)){
+                Toast.makeText(ToDoActivity.this, "잘못된 값이 존재합니다.", Toast.LENGTH_SHORT).show();
+            }
+            else {
+                    int ToDo_importance = Integer.parseInt(ToDo_str_importance);
+                    ToDoClass todo = new ToDoClass(ToDO_content,false,ToDo_importance,null);
 
+                    //CALL
+                    Call<ArrayList<ToDoClass>> call = ToDo_service.createToDoData(todo);
+                    call.enqueue(new Callback<ArrayList<ToDoClass>>() {
+                        @Override
+                        public void onResponse(Call<ArrayList<ToDoClass>> call, Response<ArrayList<ToDoClass>> response) {
+                            if (response.isSuccessful()){
+                            ArrayList<ToDoClass> todoList = new ArrayList<>();
 
-                //Button
-                Button add_button = dialog_view.findViewById(R.id.Btn_d_add);
-                Button cancel_button = dialog_view.findViewById(R.id.Btn_d_cancel);
-
-
-                //EditText
-                EditText et_todo_content = dialog_view.findViewById(R.id.et_todo_content);
-                EditText et_todo_importance = dialog_view.findViewById(R.id.et_todo_importance);
-
-
-                //onclick - In Dialog
-                add_button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        String ToDO_content = et_todo_content.getText().toString();
-                        String ToDo_str_importance = et_todo_importance.getText().toString();
-
-                        if (isValidInput(ToDO_content,ToDo_str_importance)){
-                            Toast.makeText(ToDoActivity.this, "잘못된 값이 존재합니다.", Toast.LENGTH_SHORT).show();
-                        }
-                         else {
-                             int ToDo_importance = Integer.parseInt(ToDo_str_importance);
-                             ToDoClass todo = new ToDoClass(ToDO_content,false,ToDo_importance,null);
-
-                             //CALL
-                             Call<ArrayList<ToDoClass>> call = ToDo_service.createToDoData(todo);
-                             call.enqueue(new Callback<ArrayList<ToDoClass>>() {
-                                 @Override
-                                 public void onResponse(Call<ArrayList<ToDoClass>> call, Response<ArrayList<ToDoClass>> response) {
-                                     if (response.isSuccessful()){
-                                         ArrayList<ToDoClass> todoList = new ArrayList<>();
-
-                                         for (int i = 0; i < response.body().size(); i++) {
-                                             if (!response.body().get(i).isAchievement()) {
+                                for (int i = 0; i < response.body().size(); i++) {
+                                if (!response.body().get(i).isAchievement()) {
                                                  todoList.add(response.body().get(i));
                                              }
                                          }
                                          ToDo_adapter.UpdateData(todoList);
                                          ToDo_rv.setAdapter(ToDo_adapter);
+                                         tv_noToDo.setVisibility(View.GONE);
+                                         sad_image.setVisibility(View.GONE);
                                          dialog.dismiss();
                                          Toast.makeText(ToDoActivity.this, "추가 성공", Toast.LENGTH_SHORT).show();
                                      }else{
@@ -681,8 +677,6 @@ _**• ToDoActivity**_
                                  }
                              });
                          }
-                    }
-                });
 
 ![ezgif-55499eb94f2e15](https://github.com/user-attachments/assets/7327bb00-5170-4668-a9a9-c8a96fd61add)
 
