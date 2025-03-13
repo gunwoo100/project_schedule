@@ -10,6 +10,7 @@ import android.view.animation.ScaleAnimation;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -41,6 +42,9 @@ public class ToDoActivity extends AppCompatActivity {
 
     ToDoService ToDo_service;
 
+    TextView tv_noToDo;
+    ImageView sad_image;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -53,6 +57,9 @@ public class ToDoActivity extends AppCompatActivity {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         ToDo_service = retrofit.create(ToDoService.class);
+
+        sad_image = findViewById(R.id.sad_image);
+        tv_noToDo = findViewById(R.id.tv_noToDo);
 
 
         //RecyclerView 생성 및 설정
@@ -76,8 +83,14 @@ public class ToDoActivity extends AppCompatActivity {
                             unfinished_todo_list.add(response.body().get(i));
                         }
                     }
+
+                    if (unfinished_todo_list.isEmpty()){
+                        tv_noToDo.setVisibility(View.VISIBLE);
+                        sad_image.setVisibility(View.VISIBLE);
+                    }
                     ToDo_adapter = new ToDoRvAdapter(unfinished_todo_list);
                     ToDo_rv.setAdapter(ToDo_adapter);
+
 
                     for (int i = 0; i < response.body().size(); i++) {
                         if (response.body().get(i).isAchievement()){  //일정이 완료한것만 하단에 표시
@@ -95,6 +108,8 @@ public class ToDoActivity extends AppCompatActivity {
                 Log.v("onfailure",t.getMessage());
             }
         });
+
+
 
 
         //Button
@@ -181,6 +196,8 @@ public class ToDoActivity extends AppCompatActivity {
                                          }
                                          ToDo_adapter.UpdateData(todoList);
                                          ToDo_rv.setAdapter(ToDo_adapter);
+                                         tv_noToDo.setVisibility(View.GONE);
+                                         sad_image.setVisibility(View.GONE);
                                          dialog.dismiss();
                                          Toast.makeText(ToDoActivity.this, "추가 성공", Toast.LENGTH_SHORT).show();
                                      }else{
