@@ -17,34 +17,26 @@ import retrofit2.http.Path;
 public interface ScheduleService {
 
     //GET
-    @GET("/rest/test/getByYM/{year}/{month}")
+    @GET("/rest/scheduleApp/schedule/getByYM/{year}/{month}")
     Call<ArrayList<ScheduleClass>> getDataListByYM(@Path("year")int year, @Path("month")int month);
-    @GET("/rest/test/getByYMD/{year}/{month}/{day}")
+    @GET("/rest/scheduleApp/schedule/getByYMD/{year}/{month}/{day}")
     Call<ArrayList<ScheduleClass>> getDataListByYMD(@Path("year")int year, @Path("month")int month, @Path("day")int day);
-    @GET("/rest/test/getByYMC/{year}/{month}/{category}")
+    @GET("/rest/scheduleApp/schedule/getByYMC/{year}/{month}/{category}")
     Call<ArrayList<ScheduleClass>> getDataListByYMC(@Path("year")int year, @Path("month")int month, @Path("category")String category);
 
 
     //CREATE
-    @POST("/rest/test/post")
+    @POST("/rest/scheduleApp/schedule/post")
     Call<ScheduleClass> createSchedule(@Body ScheduleClass schedule);
 
 
     //EDIT
-    @PATCH("/rest/test/edit/{year}/{month}/{day}/{content}/{category}")
-    Call<Void> editSchedule(@Path("year") int year,
-                                     @Path("month") int month,
-                                     @Path("day") int day,
-                                     @Path("content") String content,
-                                     @Path("category") String category,
-                                     @Body ScheduleClass schedule);
+    @PATCH("/rest/scheduleApp/schedule/edit/{id}")
+    Call<Void> editSchedule(@Path("id")Long id,@Body ScheduleClass schedule);
 
 
     //DELETE
-    @DELETE("/rest/test/edit/{year}/{month}/{day}/{content}/{category}")
-    Call<Integer> deleteSchedule(@Path("year") int year,
-                              @Path("month") int month,
-                              @Path("day") int day,
-                              @Path("content") String content,
-                              @Path("category") String category);
+    @DELETE("/rest/scheduleApp/schedule/delete/{id}")
+    Call<ArrayList<ScheduleClass>> deleteSchedule(@Path("id")Long id);
+
 }
