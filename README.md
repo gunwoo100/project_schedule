@@ -861,7 +861,7 @@ _**• DB**_
 
 # • 8. 최종 앱 실행 영상
 
-https://github.com/user-attachments/assets/9754770c-af0d-49ac-95cf-c4f2a221639
+
 
 <br>
 <br>
