@@ -610,6 +610,8 @@ _**• SearchViewAdaper**_
 
 • "추가하기"버튼을 누르면 대화창이 뜨고 추가하려고하는 일정의 내용과 중요도를 적은 다음에 추가하기를 누르면 목록에 저장이 된다.
 
+• "추가"를 누르면 서버쪽으로 **createToDoData()** 가 호출이 되면서 DB에 저장이 된다.
+
 _**• ToDoActivity**_
 
     //Button - onclick
@@ -684,9 +686,59 @@ _**• ToDoActivity**_
 
 ![ezgif-55499eb94f2e15](https://github.com/user-attachments/assets/7327bb00-5170-4668-a9a9-c8a96fd61add)
 
-• "추가"를 누르면 서버쪽으로 **createToDoData()** 가 호출이 되면서 DB에 저장이 된다.
 
 • 일정을 끝냈다면 해당일정을 클릭하면 "완료된 일정"으로 넘어가면서 **ToDoData의 isAchievement값이 false-->true** 로 바뀐다.
+
+_**•ToDoRvAdapter**_
+
+    @Override
+    public void onBindViewHolder(@NonNull ToDoViewHolder holder, int position) {
+        holder.tv_todo_content.setText(data.get(position).getTodo_content());
+        holder.tv_todo_importance.setText(data.get(position).getImportance()+"");
+
+        //onclick - holder
+        holder.layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Long unFinish_ToDo_id = data.get(holder.getAdapterPosition()).getTodo_id();
+
+                //Retrofit, Service
+                Retrofit retrofit_t = new Retrofit.Builder()
+                        .baseUrl("http://10.0.2.2:8080")
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
+                ToDoService service_t = retrofit_t.create(ToDoService.class);
+
+                //Call - Edit
+                Call<ArrayList<ToDoClass>> call = service_t.editToDoData(unFinish_ToDo_id);
+                call.enqueue(new Callback<ArrayList<ToDoClass>>() {
+                    @Override
+                    public void onResponse(Call<ArrayList<ToDoClass>> call, Response<ArrayList<ToDoClass>> response) {
+                        if (response.isSuccessful()){
+                            ArrayList<ToDoClass> list = new ArrayList<>();
+                            for (int i = 0; i < response.body().size(); i++) {
+                                if (!response.body().get(i).isAchievement()){
+                                    list.add(response.body().get(i));
+                                }
+                            }
+                            Toast.makeText(view.getContext(), "달성", Toast.LENGTH_SHORT).show();
+                            UpdateData(list);
+                            notifyDataSetChanged();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ArrayList<ToDoClass>> call, Throwable t) {
+                        Log.v("onFailure_ToDoAdapter",t.getMessage());
+
+                    }
+                });
+
+
+            }
+        });
+
+    }
 
 • 그리고 하단의 새로고침버튼(🔁)을 누르면 완료한 일정이 하단에 표시가 된다.
 
