@@ -26,51 +26,50 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class MyRvAdapter extends RecyclerView.Adapter<MyViewHolder> {
-    String category,content;
+public class MainRvAdapter extends RecyclerView.Adapter<MainViewHolder> {
 
     ArrayList<ScheduleClass> data;
-
-    int year,month,day;
 
     ScheduleService service;
 
 
-    public MyRvAdapter(ArrayList<ScheduleClass> data, int year, int month, int day) {
+    public MainRvAdapter(ArrayList<ScheduleClass> data) {
         this.data = data;
-        this.year = year;
-        this.month = month;
-        this.day = day;
+
     }
+
+
+    
 
 
     @NonNull
     @Override
-    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public MainViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View view = inflater.inflate(R.layout.rv_main_basket,parent,false);
-        return new MyViewHolder(view);
+        return new MainViewHolder(view);
     }
 
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MainViewHolder holder, int position) {
         ScheduleClass schedule = data.get(position);
         holder.tv_content.setText(schedule.getContent());
         holder.tv_category.setText(schedule.getCategory());
 
+
         //onClick
-        holder.tv_category.setOnClickListener(new View.OnClickListener() {
+        holder.layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                category = holder.tv_category.getText().toString();
-                content = holder.tv_content.getText().toString();
+                String category = holder.tv_category.getText().toString();
+                String content = holder.tv_content.getText().toString();
 
 
                 //AlertDialog 생성 및 설정
                 AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
                 LayoutInflater inflater = LayoutInflater.from(view.getContext());
-                View dialogView = inflater.inflate(R.layout.edit_dialog,null);
+                View dialogView = inflater.inflate(R.layout.dialog_main,null);
                 builder.setView(dialogView);
                 AlertDialog dialog = builder.create();
                 dialog.show();
@@ -94,13 +93,9 @@ public class MyRvAdapter extends RecyclerView.Adapter<MyViewHolder> {
                     @Override
                     public void onClick(View view) {
                         Intent intent = new Intent(view.getContext(), EditActivity.class);
-                        intent.putExtra("EContent",content);
-                        intent.putExtra("ECategory",category);
-                        intent.putExtra("year",year);
-                        intent.putExtra("month",month);
-                        intent.putExtra("day",day);
+                        intent.putExtra("schedule",schedule);
                         view.getContext().startActivity(intent);
-
+                        dialog.dismiss();
                     }
                 });
                 Btn_d_delete.setOnClickListener(new View.OnClickListener() {
@@ -114,13 +109,14 @@ public class MyRvAdapter extends RecyclerView.Adapter<MyViewHolder> {
 
                         service = retrofit.create(ScheduleService.class);
 
-                        Call<Integer> call = service.deleteSchedule(year,month,day,content,category);
-                        call.enqueue(new Callback<Integer>() {
+                        Call<ArrayList<ScheduleClass>> call = service.deleteSchedule(schedule.getId());
+                        call.enqueue(new Callback<ArrayList<ScheduleClass>>() {
                             @Override
-                            public void onResponse(Call<Integer> call, Response<Integer> response) {
+                            public void onResponse(Call<ArrayList<ScheduleClass>> call, Response<ArrayList<ScheduleClass>> response) {
                                 if (response.isSuccessful()){
-
                                     Toast.makeText(view.getContext(), "성공", Toast.LENGTH_SHORT).show();
+                                    data.remove(holder.getAdapterPosition());
+                                    notifyDataSetChanged();
                                     dialog.dismiss();
                                 }else{
                                     Toast.makeText(view.getContext(), "실패", Toast.LENGTH_SHORT).show();
@@ -129,7 +125,7 @@ public class MyRvAdapter extends RecyclerView.Adapter<MyViewHolder> {
                             }
 
                             @Override
-                            public void onFailure(Call<Integer> call, Throwable t) {
+                            public void onFailure(Call<ArrayList<ScheduleClass>> call, Throwable t) {
                                 Log.v("onFailure",t.getMessage());
                             }
                         });
@@ -145,8 +141,11 @@ public class MyRvAdapter extends RecyclerView.Adapter<MyViewHolder> {
                 });
 
             }
+
         });
+
     }
+
 
 
     @Override
