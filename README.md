@@ -449,7 +449,7 @@ _**• MyRvAdapter**_
 
 ![ezgif-7d6c73bc823dce](https://github.com/user-attachments/assets/8d5248df-88e9-4f98-be91-eac4f3be980b)
 
-• 여기서 사용자는 몇월달의 일정을 조회할건지와 어떤 일정을 조회할지 버튼(RadioButton)을 통해 선택한다.
+• 여기서 사용자는 몇년 몇월달의 일정을 조회할건지와 어떤 일정을 조회할지 버튼(RadioButton)을 통해 선택한다.
 
 • 선택을 다 하고 난 다음에 조회하기 버튼을 누르면 일정이 아래에 표시된다.
 
@@ -533,7 +533,7 @@ _**• SearchScheduleActivity**_
  
 • "서버쪽에서 해당 데이터를 가지고 와서 **setAdapter() (SearchViewAdapter)** 를 통해 하단에 표시해준다.
 
-![ezgif-7b14531675b653](https://github.com/user-attachments/assets/225da82c-0c56-4672-b23c-b30475cbaf70)
+![ezgif-773627387ff1ac](https://github.com/user-attachments/assets/65de5114-8e58-4af1-b8db-857e2b5e172d)
 
 
 • 하단의 일정을 클릭하면 대화창이 뜨고 삭제,수정이 가능하다.(삭제, 수정은 **3,4** 를 참고)
