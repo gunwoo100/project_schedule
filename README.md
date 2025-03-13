@@ -103,7 +103,7 @@
 
 # • 2. 일정생성화면과 코드설명
 
-![create_display](https://github.com/user-attachments/assets/d10f98a1-a696-4b15-b1fe-f8a7b3ad7157)
+![화면 캡처 2025-03-13 162405](https://github.com/user-attachments/assets/ac7b62e0-28d3-4e6a-9d77-bd66f58af413)
 
 • 메인화면에서 하단의 **'추가하기'** 버튼을 누르면 일정 생성하기 화면이 뜨고, 일정생성화면으로 넘어가면서 사용자가선택한 날짜값이 CreateActivity쪽으로 넘어간다. 
 
@@ -447,7 +447,7 @@ _**• MyRvAdapter**_
 
 • 하단의 "조회하기"버튼을 누르면 조회하기 화면으로 넘어간다.
 
-![ezgif-7d6c73bc823dce](https://github.com/user-attachments/assets/8d5248df-88e9-4f98-be91-eac4f3be980b)
+![ezgif-7af5b422f18b28](https://github.com/user-attachments/assets/db676ddd-cde2-4dc8-b339-0dbb85f3996d)
 
 • 여기서 사용자는 몇년 몇월달의 일정을 조회할건지와 어떤 일정을 조회할지 버튼(RadioButton)을 통해 선택한다.
 
@@ -539,7 +539,7 @@ _**• SearchScheduleActivity**_
  
 • "서버쪽에서 해당 데이터를 가지고 와서 **setAdapter() (SearchViewAdapter)** 를 통해 하단에 표시해준다.
 
-![ezgif-773627387ff1ac](https://github.com/user-attachments/assets/65de5114-8e58-4af1-b8db-857e2b5e172d)
+![ezgif-774005c7a443c7](https://github.com/user-attachments/assets/cf02e0a1-5376-4b2b-8fc7-627a54117c4c)
 
 
 • 하단의 일정을 클릭하면 대화창이 뜨고 삭제,수정이 가능하다.(삭제, 수정은 **3,4** 를 참고)
