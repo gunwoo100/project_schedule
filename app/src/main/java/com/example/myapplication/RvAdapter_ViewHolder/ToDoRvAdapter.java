@@ -1,5 +1,6 @@
 package com.example.myapplication.RvAdapter_ViewHolder;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,16 +24,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ToDoRvAdapter extends RecyclerView.Adapter<ToDoViewHolder> {
     ArrayList<ToDoClass> data;
 
-    String finish_content;
-
-    Retrofit retrofit;
-    ToDoService service;
-
-
-
     public ToDoRvAdapter(ArrayList<ToDoClass> data) {
         this.data = data;
-
     }
 
     public void UpdateData(ArrayList<ToDoClass> data){
@@ -52,40 +45,47 @@ public class ToDoRvAdapter extends RecyclerView.Adapter<ToDoViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ToDoViewHolder holder, int position) {
         holder.tv_todo_content.setText(data.get(position).getTodo_content());
+        holder.tv_todo_importance.setText(data.get(position).getImportance()+"");
+
+        //onclick - holder
         holder.layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish_content = holder.tv_todo_content.getText().toString();
-                for (int i = 0; i < data.size(); i++) {
-                    if (data.get(i).getTodo_content().equals(holder.tv_todo_content.getText().toString())){
+                Long unFinish_ToDo_id = data.get(holder.getAdapterPosition()).getTodo_id();
 
-                        //Retrofit, Service
-                        retrofit = new Retrofit.Builder()
-                                .baseUrl("http://10.0.2.2:8080")
-                                .addConverterFactory(GsonConverterFactory.create())
-                                .build();
-                        service = retrofit.create(ToDoService.class);
+                //Retrofit, Service
+                Retrofit retrofit_t = new Retrofit.Builder()
+                        .baseUrl("http://10.0.2.2:8080")
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
+                ToDoService service_t = retrofit_t.create(ToDoService.class);
 
-
-                        //Call - Edit
-                        Call<Integer> call = service.editToDoData(data.get(i));
-                        call.enqueue(new Callback<Integer>() {
-                            @Override
-                            public void onResponse(Call<Integer> call, Response<Integer> response) {
-                                Toast.makeText(view.getContext(), "달성", Toast.LENGTH_SHORT).show();
+                //Call - Edit
+                Call<ArrayList<ToDoClass>> call = service_t.editToDoData(unFinish_ToDo_id);
+                call.enqueue(new Callback<ArrayList<ToDoClass>>() {
+                    @Override
+                    public void onResponse(Call<ArrayList<ToDoClass>> call, Response<ArrayList<ToDoClass>> response) {
+                        if (response.isSuccessful()){
+                            ArrayList<ToDoClass> list = new ArrayList<>();
+                            for (int i = 0; i < response.body().size(); i++) {
+                                if (!response.body().get(i).isAchievement()){
+                                    list.add(response.body().get(i));
+                                }
                             }
-
-                            @Override
-                            public void onFailure(Call<Integer> call, Throwable t) {
-
-                            }
-                        });
-
-                        data.remove(i);
-                        notifyDataSetChanged();
-                        break;
+                            Toast.makeText(view.getContext(), "달성", Toast.LENGTH_SHORT).show();
+                            UpdateData(list);
+                            notifyDataSetChanged();
+                        }
                     }
-                }
+
+                    @Override
+                    public void onFailure(Call<ArrayList<ToDoClass>> call, Throwable t) {
+                        Log.v("onFailure_ToDoAdapter",t.getMessage());
+
+                    }
+                });
+
+
             }
         });
 
@@ -95,6 +95,9 @@ public class ToDoRvAdapter extends RecyclerView.Adapter<ToDoViewHolder> {
     public int getItemCount() {
         return data.size();
     }
+
+
+}
 
 
 }
