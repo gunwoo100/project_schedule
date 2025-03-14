@@ -39,7 +39,7 @@ public class MainRvAdapter extends RecyclerView.Adapter<MainViewHolder> {
     }
 
 
-    
+
 
 
     @NonNull
@@ -109,10 +109,10 @@ public class MainRvAdapter extends RecyclerView.Adapter<MainViewHolder> {
 
                         service = retrofit.create(ScheduleService.class);
 
-                        Call<ArrayList<ScheduleClass>> call = service.deleteSchedule(schedule.getId());
-                        call.enqueue(new Callback<ArrayList<ScheduleClass>>() {
+                        Call<Integer> call = service.deleteSchedule(schedule.getId());
+                        call.enqueue(new Callback<Integer>() {
                             @Override
-                            public void onResponse(Call<ArrayList<ScheduleClass>> call, Response<ArrayList<ScheduleClass>> response) {
+                            public void onResponse(Call<Integer> call, Response<Integer> response) {
                                 if (response.isSuccessful()){
                                     Toast.makeText(view.getContext(), "성공", Toast.LENGTH_SHORT).show();
                                     data.remove(holder.getAdapterPosition());
@@ -125,7 +125,7 @@ public class MainRvAdapter extends RecyclerView.Adapter<MainViewHolder> {
                             }
 
                             @Override
-                            public void onFailure(Call<ArrayList<ScheduleClass>> call, Throwable t) {
+                            public void onFailure(Call<Integer> call, Throwable t) {
                                 Log.v("onFailure",t.getMessage());
                             }
                         });
