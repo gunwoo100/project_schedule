@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,17 +31,18 @@ public class MainRvAdapter extends RecyclerView.Adapter<MainViewHolder> {
 
     ArrayList<ScheduleClass> data;
 
+    //if - No Schedule Data
+    TextView tv_noSchedule;
+    ImageView sad_image;
+
     ScheduleService service;
 
 
-    public MainRvAdapter(ArrayList<ScheduleClass> data) {
+    public MainRvAdapter(ArrayList<ScheduleClass> data, TextView tv_noSchedule, ImageView sad_image) {
         this.data = data;
-
+        this.tv_noSchedule = tv_noSchedule;
+        this.sad_image = sad_image;
     }
-
-
-
-
 
     @NonNull
     @Override
@@ -117,6 +119,10 @@ public class MainRvAdapter extends RecyclerView.Adapter<MainViewHolder> {
                                     Toast.makeText(view.getContext(), "성공", Toast.LENGTH_SHORT).show();
                                     data.remove(holder.getAdapterPosition());
                                     notifyDataSetChanged();
+                                    if (data.isEmpty()){
+                                        sad_image.setVisibility(View.VISIBLE);
+                                        tv_noSchedule.setVisibility(View.VISIBLE);
+                                    }
                                     dialog.dismiss();
                                 }else{
                                     Toast.makeText(view.getContext(), "실패", Toast.LENGTH_SHORT).show();
@@ -137,6 +143,7 @@ public class MainRvAdapter extends RecyclerView.Adapter<MainViewHolder> {
                     @Override
                     public void onClick(View view) {
                         dialog.dismiss();
+
                     }
                 });
 
