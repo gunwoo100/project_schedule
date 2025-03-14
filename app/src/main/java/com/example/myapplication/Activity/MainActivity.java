@@ -2,8 +2,16 @@ package com.example.myapplication.Activity;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;package com.example.myapplication.Activity;
+
+import android.app.AlertDialog;
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.GestureDetector;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.ScaleAnimation;
 import android.widget.Button;
@@ -54,6 +62,8 @@ public class MainActivity extends AppCompatActivity {
 
     ActivityResultLauncher<Intent> launcher;
 
+    GestureDetector gestureDetector;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +76,18 @@ public class MainActivity extends AppCompatActivity {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         service = retrofit.create(ScheduleService.class);
+
+        gestureDetector = new GestureDetector(this,new GestureDetector.SimpleOnGestureListener(){
+            @Override
+            public void onLongPress(@NonNull MotionEvent e) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                LayoutInflater inflater = LayoutInflater.from(MainActivity.this);
+                View dialogView = inflater.inflate(R.layout.dialog_main,null);
+                builder.setView(dialogView);
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+        });
 
 
         //TextView
@@ -340,6 +362,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     Log.v("TAG#",response.isSuccessful()+"");
                     adapter = new MainRvAdapter(response.body(),tv_noSchedule,sad_image);
+                    Log.v("TESTTAGEEE",response.body().toString());
                     rv.setAdapter(adapter);
                     tv_display_date.setText(year+"/"+month+"/"+day+"의 일정");
 
