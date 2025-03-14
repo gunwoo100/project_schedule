@@ -36,7 +36,7 @@
 
 # • 1. 메인 화면과 코드설명
 
-![메인화면](https://github.com/user-attachments/assets/86f7536c-8fb7-4115-9b00-94f55687bc65)   ![0313 메인 화면 사진추가](https://github.com/user-attachments/assets/dbb19913-7755-4366-9362-9de1c363a0b9)
+![main화면 수정](https://github.com/user-attachments/assets/f87e46f8-1b1a-41db-86ec-97d72b3c7ce7)    ![0313 메인 화면 사진추가](https://github.com/user-attachments/assets/dbb19913-7755-4366-9362-9de1c363a0b9)
 
 
 **달력📅**
@@ -115,6 +115,10 @@
 ⬇️
 
 ![화면 캡처 2025-03-12 144107](https://github.com/user-attachments/assets/840be884-633c-468a-abb8-a5fc59036202)
+
+• 일정을 완료했다면 하단의 일정을 누르면 해당 일정의 배경화면이 초록색으로 바뀌면서 schedule_isAchievement값이 false -> true값으로 바뀐다.
+
+![ezgif-4f6337a1308b0c](https://github.com/user-attachments/assets/ba612153-9a71-4582-a6a7-a23175a1b8ba)
 
 • 하단의 **'추가하기'** 와 **'조회하기'** 버튼은 2,5에서 설명할 예정이다.
 
@@ -265,7 +269,7 @@ _**• CreateActivity**_
 
 # • 3. 일정수정화면과 코드설명
 
-• 우선 일정을 수정할려면 메인화면에서 하단의 일정중 수정,삭제하고 싶은 일정을 누른 다음, 대화창이 뜨면 "수정하기"버튼을 누르면 수정화면으로 이동한다.
+• 우선 일정을 수정할려면 메인화면에서 하단의 일정중 수정,삭제하고 싶은 일정을 **길게** 누른 다음, 대화창이 뜨면 "수정하기"버튼을 누르면 수정화면으로 이동한다.
 
 ![ezgif-7fdb6fbe4cce1f](https://github.com/user-attachments/assets/d58fcc46-7043-48d4-a4b1-dd6a849d0b02)
 
@@ -275,49 +279,46 @@ _**• CreateActivity**_
 _**• MyRvAdapter**_
    
     ...
-    holder.tv_category.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            category = holder.tv_category.getText().toString();
-            content = holder.tv_content.getText().toString();
+        holder.layout.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                ScheduleClass schedule = data.get(holder.getAdapterPosition());
+                String category = holder.tv_category.getText().toString();
+                String content = holder.tv_content.getText().toString();
 
 
-            //AlertDialog 생성 및 설정
-            AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
-            LayoutInflater inflater = LayoutInflater.from(view.getContext());
-            View dialogView = inflater.inflate(R.layout.edit_dialog,null);
-            builder.setView(dialogView);
-            AlertDialog dialog = builder.create();
-            dialog.show();
+                //AlertDialog 생성 및 설정
+                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                LayoutInflater inflater = LayoutInflater.from(view.getContext());
+                View dialogView = inflater.inflate(R.layout.dialog_main,null);
+                builder.setView(dialogView);
+                AlertDialog dialog = builder.create();
+                dialog.show();
 
 
-            //TextView - In Dialog
-            TextView tv_d_content = dialogView.findViewById(R.id.tv_d_content);
-            TextView tv_d_category = dialogView.findViewById(R.id.tv_d_category);
-            tv_d_content.setText(content);
-            tv_d_category.setText(category);
+                //TextView - In Dialog
+                TextView tv_d_content = dialogView.findViewById(R.id.tv_d_content);
+                TextView tv_d_category = dialogView.findViewById(R.id.tv_d_category);
+                tv_d_content.setText(content);
+                tv_d_category.setText(category);
 
 
-            //Button - In Dialog
-            Button Btn_d_edit = dialogView.findViewById(R.id.edit_button);
-            Button Btn_d_delete = dialogView.findViewById(R.id.delete_button);
-            Button Btn_d_cancel = dialogView.findViewById(R.id.cancel_button);
+                //Button - In Dialog
+                Button Btn_d_edit = dialogView.findViewById(R.id.edit_button);
+                Button Btn_d_delete = dialogView.findViewById(R.id.delete_button);
+                Button Btn_d_cancel = dialogView.findViewById(R.id.cancel_button);
 
 
-            //onclick -- EDIT
-            Btn_d_edit.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(view.getContext(), EditActivity.class);
-                    intent.putExtra("EContent",content);
-                    intent.putExtra("ECategory",category);
-                    intent.putExtra("year",year);
-                    intent.putExtra("month",month);
-                    intent.putExtra("day",day);
-                    view.getContext().startActivity(intent);
-            
-                }
-            });
+                //onclick
+                Btn_d_edit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(view.getContext(), EditActivity.class);
+                        intent.putExtra("schedule",schedule);
+                        view.getContext().startActivity(intent);
+                        dialog.dismiss();
+                    }
+                });
 
 • 수정화면으로 넘어가면서 해당 일정의 객체 데이터가 **EditActivity** 쪽으로 넘어간다.
 
@@ -413,7 +414,7 @@ _**• MyRvAdapter**_
 
 # • 4. 일정 삭제화면과 코드설명
 
-• 일정을 삭제하려면 메인화면에서 하단의 일정중 삭제하고 싶은 일정을 클릭하면 대화상자가 나온다.
+• 일정을 삭제하려면 메인화면에서 하단의 일정중 삭제하고 싶은 일정을 **길게** 클릭하면 대화상자가 나온다.
 
 그런 다음에 "삭제하기" 버튼을 누르면 성공적으로 삭제가 된다.
 
