@@ -116,7 +116,7 @@
 
 ![화면 캡처 2025-03-12 144107](https://github.com/user-attachments/assets/840be884-633c-468a-abb8-a5fc59036202)
 
-• 일정을 완료했다면 하단의 일정을 누르면 해당 일정의 배경화면이 초록색으로 바뀌면서 schedule_isAchievement값이 false -> true값으로 바뀐다.
+• 일정을 완료했다면 하단의 일정을 **짧게** 누르면 해당 일정의 배경화면이 초록색으로 바뀌면서 schedule_isAchievement값이 false -> true값으로 바뀐다.
 
 ![ezgif-4f6337a1308b0c](https://github.com/user-attachments/assets/ba612153-9a71-4582-a6a7-a23175a1b8ba)
 
