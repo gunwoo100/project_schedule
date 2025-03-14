@@ -86,19 +86,11 @@ public class ToDoFinishRvAdapter extends RecyclerView.Adapter<ToDoFinishViewHold
                                 .build();
                         ToDoService service = retrofit.create(ToDoService.class);
 
-                        service.deleteToDoData(delete_ToDoId).enqueue(new Callback<ArrayList<ToDoClass>>() {
+                        service.deleteToDoData(delete_ToDoId).enqueue(new Callback<Integer>() {
                             @Override
-                            public void onResponse(Call<ArrayList<ToDoClass>> call, Response<ArrayList<ToDoClass>> response) {
+                            public void onResponse(Call<Integer> call, Response<Integer> response) {
                                 if (response.isSuccessful()){
-                                    ArrayList<ToDoClass> list = new ArrayList<>();
-                                    for (int i = 0; i < response.body().size(); i++) {
-                                        if (response.body().get(i).isAchievement()){
-                                            ToDoClass data = response.body().get(i);
-                                            list.add(data);
-                                        }
-                                    }
-
-                                    updateData(list);
+                                    data.remove(holder.getAdapterPosition());
                                     notifyDataSetChanged();
                                     Toast.makeText(view.getContext(), "삭제가 완료되었습니다.", Toast.LENGTH_SHORT).show();
                                     dialog.dismiss();
@@ -106,7 +98,7 @@ public class ToDoFinishRvAdapter extends RecyclerView.Adapter<ToDoFinishViewHold
                             }
 
                             @Override
-                            public void onFailure(Call<ArrayList<ToDoClass>> call, Throwable t) {
+                            public void onFailure(Call<Integer> call, Throwable t) {
                                 Log.v("onFailure_ToDoFinishRvAdapter",t.getMessage());
                             }
                         });
