@@ -678,7 +678,7 @@ _**• ToDoActivity**_
                              });
                          }
 
-![ezgif-55499eb94f2e15](https://github.com/user-attachments/assets/7327bb00-5170-4668-a9a9-c8a96fd61add)
+![ezgif-318e3964f982e3](https://github.com/user-attachments/assets/51437136-1166-48eb-aa57-d419dac8334b)
 
 
 • 일정을 끝냈다면 해당일정을 클릭하면 "완료된 일정"으로 넘어가면서 **ToDoData의 isAchievement값이 false-->true** 로 바뀐다.
@@ -771,7 +771,7 @@ _**• ToDoActivity**_
         }
     });
 
-![ezgif-5c7f4a939e48f7](https://github.com/user-attachments/assets/1a3d0fa6-08ff-4a91-a4dd-6d22c4d34822)
+![ezgif-34cb7e5f5453f7](https://github.com/user-attachments/assets/8df1c1fd-ac52-4baf-8030-007752cbf585)
 
 _**• DB**_
 
@@ -852,7 +852,8 @@ _**• DB**_
             }
         });
 
-![ezgif-7ccec54039de72](https://github.com/user-attachments/assets/5f290c3c-4676-4599-b0ed-7cbb58ede61f)
+![ezgif-6c420dfb50145f](https://github.com/user-attachments/assets/09cd76ca-88ea-414e-b3ed-0e25af6e90b4)
+
 
 
 <br>
@@ -907,11 +908,7 @@ _**• DB**_
 
 # • 8. 최종 앱 실행 영상
 
-
-
-https://github.com/user-attachments/assets/f378ac6d-356f-43c1-9988-9f1ca95296dc
-
-
+https://github.com/user-attachments/assets/ba582dda-3f26-4b50-b508-9a7f6ebaec34
 
 <br>
 <br>
