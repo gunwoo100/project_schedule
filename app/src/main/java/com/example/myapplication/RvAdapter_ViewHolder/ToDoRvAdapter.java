@@ -4,11 +4,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.myapplication.Activity.ToDoActivity;
 import com.example.myapplication.Class.ToDoClass;
 import com.example.myapplication.R;
 import com.example.myapplication.Service.ToDoService;
@@ -23,13 +26,18 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ToDoRvAdapter extends RecyclerView.Adapter<ToDoViewHolder> {
     ArrayList<ToDoClass> data;
+    TextView tv_noToDo;
+    ImageView sad_image;
 
-    public ToDoRvAdapter(ArrayList<ToDoClass> data) {
+    public ToDoRvAdapter(ArrayList<ToDoClass> data, TextView tv_noToDo, ImageView sad_image) {
         this.data = data;
+        this.tv_noToDo = tv_noToDo;
+        this.sad_image = sad_image;
     }
 
     public void UpdateData(ArrayList<ToDoClass> data){
         this.data = data;
+        notifyDataSetChanged();
     }
 
 
@@ -61,30 +69,28 @@ public class ToDoRvAdapter extends RecyclerView.Adapter<ToDoViewHolder> {
                 ToDoService service_t = retrofit_t.create(ToDoService.class);
 
                 //Call - Edit
-                Call<ArrayList<ToDoClass>> call = service_t.editToDoData(unFinish_ToDo_id);
-                call.enqueue(new Callback<ArrayList<ToDoClass>>() {
+                Call<Integer> call = service_t.editToDoData(unFinish_ToDo_id);
+                call.enqueue(new Callback<Integer>() {
                     @Override
-                    public void onResponse(Call<ArrayList<ToDoClass>> call, Response<ArrayList<ToDoClass>> response) {
+                    public void onResponse(Call<Integer> call, Response<Integer> response) {
                         if (response.isSuccessful()){
-                            ArrayList<ToDoClass> list = new ArrayList<>();
-                            for (int i = 0; i < response.body().size(); i++) {
-                                if (!response.body().get(i).isAchievement()){
-                                    list.add(response.body().get(i));
-                                }
-                            }
+                            data.remove(holder.getLayoutPosition());
+                            Log.v("TESTTAGDATA",data.toString());
                             Toast.makeText(view.getContext(), "달성", Toast.LENGTH_SHORT).show();
-                            UpdateData(list);
-                            notifyDataSetChanged();
+                            UpdateData(data);
+                            if (data.isEmpty()){
+                                tv_noToDo.setVisibility(View.VISIBLE);
+                                sad_image.setVisibility(View.VISIBLE);
+                            }
                         }
                     }
 
                     @Override
-                    public void onFailure(Call<ArrayList<ToDoClass>> call, Throwable t) {
+                    public void onFailure(Call<Integer> call, Throwable t) {
                         Log.v("onFailure_ToDoAdapter",t.getMessage());
 
                     }
                 });
-
 
             }
         });
@@ -95,9 +101,5 @@ public class ToDoRvAdapter extends RecyclerView.Adapter<ToDoViewHolder> {
     public int getItemCount() {
         return data.size();
     }
-
-
-}
-
 
 }
