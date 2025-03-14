@@ -339,7 +339,7 @@ public class MainActivity extends AppCompatActivity {
                         tv_noSchedule.setVisibility(View.GONE);
                     }
                     Log.v("TAG#",response.isSuccessful()+"");
-                    adapter = new MainRvAdapter(response.body());
+                    adapter = new MainRvAdapter(response.body(),tv_noSchedule,sad_image);
                     rv.setAdapter(adapter);
                     tv_display_date.setText(year+"/"+month+"/"+day+"의 일정");
 
