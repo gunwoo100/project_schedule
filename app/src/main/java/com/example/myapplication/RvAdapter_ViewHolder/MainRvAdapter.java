@@ -24,6 +24,33 @@ import java.util.ArrayList;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.Retrofit;package com.example.myapplication.RvAdapter_ViewHolder;
+
+import android.app.AlertDialog;
+import android.content.Intent;
+import android.graphics.Color;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.myapplication.Activity.EditActivity;
+import com.example.myapplication.R;
+import com.example.myapplication.Class.ScheduleClass;
+import com.example.myapplication.Service.ScheduleService;
+
+import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -56,14 +83,22 @@ public class MainRvAdapter extends RecyclerView.Adapter<MainViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull MainViewHolder holder, int position) {
         ScheduleClass schedule = data.get(position);
-        holder.tv_content.setText(schedule.getContent());
-        holder.tv_category.setText(schedule.getCategory());
+        for (int i = 0; i < data.size(); i++) {
+            if (schedule.isAchievement()){
+                holder.layout.setBackgroundResource(R.drawable.bolder7);
+            }else{
+                holder.layout.setBackgroundResource(R.drawable.bolder);
+            }
+        }
+        holder.tv_content.setText(data.get(position).getContent());
+        holder.tv_category.setText(data.get(position).getCategory());
 
 
-        //onClick
-        holder.layout.setOnClickListener(new View.OnClickListener() {
+
+        holder.layout.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
-            public void onClick(View view) {
+            public boolean onLongClick(View view) {
+                ScheduleClass schedule = data.get(holder.getAdapterPosition());
                 String category = holder.tv_category.getText().toString();
                 String content = holder.tv_content.getText().toString();
 
@@ -147,8 +182,39 @@ public class MainRvAdapter extends RecyclerView.Adapter<MainViewHolder> {
                     }
                 });
 
+                return false;
+
             }
 
+        });
+
+        holder.layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl("http://10.0.2.2:8080")
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
+
+                service = retrofit.create(ScheduleService.class);
+
+                Call<Integer> call = service.editIsAchievement(data.get(holder.getAdapterPosition()).getId());
+                call.enqueue(new Callback<Integer>() {
+                    @Override
+                    public void onResponse(Call<Integer> call, Response<Integer> response) {
+                        if (response.isSuccessful()){
+                            Log.v("CALL","");
+                            holder.layout.setBackgroundResource(R.drawable.bolder7);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Integer> call, Throwable t) {
+
+                    }
+                });
+
+            }
         });
 
     }
