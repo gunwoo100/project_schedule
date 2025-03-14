@@ -271,7 +271,7 @@ _**• CreateActivity**_
 
 • 우선 일정을 수정할려면 메인화면에서 하단의 일정중 수정,삭제하고 싶은 일정을 **길게** 누른 다음, 대화창이 뜨면 "수정하기"버튼을 누르면 수정화면으로 이동한다.
 
-![ezgif-7fdb6fbe4cce1f](https://github.com/user-attachments/assets/d58fcc46-7043-48d4-a4b1-dd6a849d0b02)
+![ezgif-4e5ce9bc60e868](https://github.com/user-attachments/assets/7c302f26-d17e-4af1-8784-402066a8697d)
 
 
 • 이때 하단의 일정은 리사이클러뷰(MyRvAdapter)로 통해서 표시되기 때문에 **대화창이 화면에 표시되는 코드는 **MyRvAdapter** 에 있다**.
