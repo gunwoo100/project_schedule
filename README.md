@@ -636,7 +636,7 @@ _**• SearchViewAdaper**_
 <br>
 <br>
 
-![화면 캡처 2025-03-13 175447](https://github.com/user-attachments/assets/36e7814a-77bf-4a33-bc99-ffdd3d383d68)   ![0313 ToDo화면에 사진추가](https://github.com/user-attachments/assets/a2ed75db-7f46-4600-ab2d-6482dfddfdc7)
+![0317 ToDo화면 수정1](https://github.com/user-attachments/assets/da741540-2f5e-4704-bf9b-b3b33e4f057e)    ![0317 ToDo화면 수정2](https://github.com/user-attachments/assets/3aa4ba76-5600-4415-a063-764ed748c965)
 
 
 • **_ToDoList_** 란? : 요일과 관계없는 일정을 추가할수 있는 화면이다.( ex)설거지하기, 장보러 갔다오기...)
