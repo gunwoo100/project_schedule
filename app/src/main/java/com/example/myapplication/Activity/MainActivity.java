@@ -2,16 +2,7 @@ package com.example.myapplication.Activity;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.Bundle;package com.example.myapplication.Activity;
-
-import android.app.AlertDialog;
-import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.GestureDetector;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.ScaleAnimation;
 import android.widget.Button;
@@ -62,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
 
     ActivityResultLauncher<Intent> launcher;
 
-    GestureDetector gestureDetector;
+
 
 
     @Override
@@ -77,27 +68,17 @@ public class MainActivity extends AppCompatActivity {
                 .build();
         service = retrofit.create(ScheduleService.class);
 
-        gestureDetector = new GestureDetector(this,new GestureDetector.SimpleOnGestureListener(){
-            @Override
-            public void onLongPress(@NonNull MotionEvent e) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                LayoutInflater inflater = LayoutInflater.from(MainActivity.this);
-                View dialogView = inflater.inflate(R.layout.dialog_main,null);
-                builder.setView(dialogView);
-                AlertDialog dialog = builder.create();
-                dialog.show();
-            }
-        });
-
-
+        
         //TextView
         tv_day = findViewById(R.id.tv_Day);
         tv_display_date = findViewById(R.id.tv_display_date);
         tv_noSchedule = findViewById(R.id.tv_noSchedule);
 
+        
         //ImageView
         sad_image = findViewById(R.id.sad_image_main);
 
+        
         //Calender
         calendar = findViewById(R.id.calendarView);
 
@@ -360,9 +341,7 @@ public class MainActivity extends AppCompatActivity {
                         sad_image.setVisibility(View.GONE);
                         tv_noSchedule.setVisibility(View.GONE);
                     }
-                    Log.v("TAG#",response.isSuccessful()+"");
                     adapter = new MainRvAdapter(response.body(),tv_noSchedule,sad_image);
-                    Log.v("TESTTAGEEE",response.body().toString());
                     rv.setAdapter(adapter);
                     tv_display_date.setText(year+"/"+month+"/"+day+"의 일정");
 
