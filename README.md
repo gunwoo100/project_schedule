@@ -36,7 +36,9 @@
 
 # • 1. 메인 화면과 코드설명
 
-![main화면 수정](https://github.com/user-attachments/assets/f87e46f8-1b1a-41db-86ec-97d72b3c7ce7)    ![0313 메인 화면 사진추가](https://github.com/user-attachments/assets/dbb19913-7755-4366-9362-9de1c363a0b9)
+![0317 메인화면 수정](https://github.com/user-attachments/assets/bda93c25-19eb-4ccd-a85a-044cd5ee5a97)   ![0317 메인화면 수정2](https://github.com/user-attachments/assets/76b237ba-fc5c-4a7b-b291-baed54bd1fc8)
+
+
 
 
 **달력📅**
