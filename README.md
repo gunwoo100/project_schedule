@@ -349,11 +349,11 @@ _**• MyRvAdapter**_
                     //SET_COLOR
                     Btn_back.setBackgroundColor(Color.parseColor("#FFFFFF"));
                     Btn_change.setBackgroundColor(Color.parseColor("#B2FFAF"));
-
+                
 
                     //EditText - getText()
                     EditContent = et_content.getText().toString();
-
+                
 
                     //RadioButton_isChecked()
                     if (rb_exercise.isChecked())    editData("운동", EditContent);
@@ -365,6 +365,8 @@ _**• MyRvAdapter**_
                 }
             }
         });
+    
+
     }
 
     public void editData(String c_category,String c_content){
@@ -373,16 +375,17 @@ _**• MyRvAdapter**_
                 schedule.getYear(),
                 schedule.getMonth(),
                 schedule.getDay(),
-                schedule.getId());
+                schedule.getId(),
+                false);
 
         //CALL
-        Call<Void> call =  service.editSchedule(
+        Call<Integer> call =  service.editSchedule(
                 newSchedule.getId(),
                 newSchedule);
 
-        call.enqueue(new Callback<Void>() {
+        call.enqueue(new Callback<Integer>() {
             @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
+            public void onResponse(Call<Integer> call, Response<Integer> response) {
                 if (response.isSuccessful()){
                     Toast.makeText(EditActivity.this, "변경성공", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(EditActivity.this,MainActivity.class);
@@ -394,10 +397,11 @@ _**• MyRvAdapter**_
             }
 
             @Override
-            public void onFailure(Call<Void> call, Throwable t) {
+            public void onFailure(Call<Integer> call, Throwable t) {
                 Log.v("onFailure",t.getMessage());
             }
         });
+    }
 
 • 변경하기 버튼을 누르면 서버쪽으로 **editSchedule()** 이 호출되면서 변경한 내용값을 통해 데이터의 값을 변경한다.
 
