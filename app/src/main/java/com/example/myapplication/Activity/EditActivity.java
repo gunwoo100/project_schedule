@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.ScaleAnimation;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -27,23 +28,21 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class EditActivity extends AppCompatActivity {
     Button Btn_back,Btn_change;
 
-    TextView tv_b_content,tv_b_category,tv_displayDate;
-
     EditText et_content;
 
     ScheduleService service;
 
-    String change_content;
+    String EditContent;
 
     RadioButton rb_exercise,rb_meet,rb_rest,rb_study,rb_hobby;
 
-    int year,month,day;
+    ScheduleClass schedule;
 
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.edit_schedule);
+        setContentView(R.layout.activity_edit_schedule);
 
         //Retrofit,Service
         Retrofit retrofit = new Retrofit.Builder()
@@ -53,22 +52,21 @@ public class EditActivity extends AppCompatActivity {
         service = retrofit.create(ScheduleService.class);
 
 
-        //INTENT-By RecyclerView
+        //INTENT - By RecyclerView
         Intent intent = getIntent();
-        String content = intent.getStringExtra("EContent");
-        String category = intent.getStringExtra("ECategory");
-
-
-        //DateData(Int)
-        year = intent.getIntExtra("year",0);
-        month = intent.getIntExtra("month",0);
-        day = intent.getIntExtra("day",0);
+        schedule = (ScheduleClass) intent.getSerializableExtra("schedule");
 
 
         //TextView
-        tv_b_content = findViewById(R.id.tv_b_beforeContent);
-        tv_b_category = findViewById(R.id.tv_beforeCategory);
-        tv_displayDate = findViewById(R.id.tv_displayDate);
+        TextView tv_b_content = findViewById(R.id.tv_b_beforeContent);
+        TextView tv_b_category = findViewById(R.id.tv_beforeCategory);
+        TextView tv_displayDate = findViewById(R.id.tv_displayDate);
+
+
+        //변경전 일정내용과 카테고리를 edit화면에 표시
+        tv_displayDate.setText(schedule.getYear()+"/"+schedule.getMonth()+"/"+schedule.getDay()+"의 일정");
+        tv_b_content.setText(schedule.getContent());
+        tv_b_category.setText(schedule.getCategory());
 
 
         //RadioButton
@@ -77,12 +75,6 @@ public class EditActivity extends AppCompatActivity {
         rb_hobby = findViewById(R.id.rb_edit_hobby);
         rb_rest = findViewById(R.id.rb_edit_rest);
         rb_study = findViewById(R.id.rb_edit_study);
-
-
-        //변경전 일정내용과 카테고리를 edit화면에 표시
-        tv_displayDate.setText(year+"/"+month+"/"+day+"의 일정");
-        tv_b_content.setText(content);
-        tv_b_category.setText(category);
 
 
         //EditText
@@ -98,6 +90,32 @@ public class EditActivity extends AppCompatActivity {
         Btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //Animation
+                {
+                    // 커지는 애니메이션 생성
+                    ScaleAnimation scaleUp = new ScaleAnimation(
+                            1f, 1.2f, // X축 크기: 1배에서 1.5배로
+                            1f, 1.5f, // Y축 크기: 1배에서 1.5배로
+                            ScaleAnimation.RELATIVE_TO_SELF, 0.5f, // 기준점을 뷰의 중심으로 설정
+                            ScaleAnimation.RELATIVE_TO_SELF, 0.5f);
+                    scaleUp.setDuration(700);  // 0.5초 동안 커짐
+                    scaleUp.setFillAfter(true); // 애니메이션 후 최종 상태 유지
+
+                    // 작아지는 애니메이션 생성
+                    ScaleAnimation scaleDown = new ScaleAnimation(
+                            1.1f, 1f, // X축 크기: 1.5배에서 1배로
+                            1.1f, 1f, // Y축 크기: 1.5배에서 1배로
+                            ScaleAnimation.RELATIVE_TO_SELF, 0.5f, // 기준점을 뷰의 중심으로 설정
+                            ScaleAnimation.RELATIVE_TO_SELF, 0.5f);
+                    scaleDown.setDuration(400);  // 0.3초 동안 작아짐
+                    scaleDown.setFillAfter(true); // 애니메이션 후 최종 상태 유지
+
+                    // 애니메이션을 순차적으로 실행
+                    Btn_back.startAnimation(scaleUp);
+                    Btn_back.startAnimation(scaleDown);
+                }
+
+
                 //SET_COLOR
                 Btn_back.setBackgroundColor(Color.parseColor("#B2FFAF"));
                 Btn_change.setBackgroundColor(Color.parseColor("#FFFFFF"));
@@ -116,196 +134,87 @@ public class EditActivity extends AppCompatActivity {
                 if (et_content==null){
                     Toast.makeText(EditActivity.this, "빈값이 존재합니다.", Toast.LENGTH_SHORT).show();
                 }else{
+                    //Animation
+                    {
+                        // 커지는 애니메이션 생성
+                        ScaleAnimation scaleUp = new ScaleAnimation(
+                                1f, 1.2f, // X축 크기: 1배에서 1.5배로
+                                1f, 1.5f, // Y축 크기: 1배에서 1.5배로
+                                ScaleAnimation.RELATIVE_TO_SELF, 0.5f, // 기준점을 뷰의 중심으로 설정
+                                ScaleAnimation.RELATIVE_TO_SELF, 0.5f);
+                        scaleUp.setDuration(700);  // 0.5초 동안 커짐
+                        scaleUp.setFillAfter(true); // 애니메이션 후 최종 상태 유지
+
+                        // 작아지는 애니메이션 생성
+                        ScaleAnimation scaleDown = new ScaleAnimation(
+                                1.1f, 1f, // X축 크기: 1.5배에서 1배로
+                                1.1f, 1f, // Y축 크기: 1.5배에서 1배로
+                                ScaleAnimation.RELATIVE_TO_SELF, 0.5f, // 기준점을 뷰의 중심으로 설정
+                                ScaleAnimation.RELATIVE_TO_SELF, 0.5f);
+                        scaleDown.setDuration(400);  // 0.3초 동안 작아짐
+                        scaleDown.setFillAfter(true); // 애니메이션 후 최종 상태 유지
+
+                        // 애니메이션을 순차적으로 실행
+                        Btn_change.startAnimation(scaleUp);
+                        Btn_change.startAnimation(scaleDown);
+                    }
+
                     //SET_COLOR
                     Btn_back.setBackgroundColor(Color.parseColor("#FFFFFF"));
                     Btn_change.setBackgroundColor(Color.parseColor("#B2FFAF"));
 
-                    change_content = et_content.getText().toString();
+
+                    //EditText - getText()
+                    EditContent = et_content.getText().toString();
+
 
                     //RadioButton_isChecked()
-                    if (rb_exercise.isChecked()){
-                        ScheduleClass newSchedule = new ScheduleClass(change_content,
-                            "운동",
-                            year,
-                            month,
-                            day);
-
-                        //Call
-                        Call<Void> call =  service.editSchedule(
-                                year,
-                                month,
-                                day,
-                                tv_b_content.getText().toString(),
-                                tv_b_category.getText().toString(),  //기존에있던 데이터를 찾기 위해서
-                                newSchedule);
-
-                        call.enqueue(new Callback<Void>() {
-                            @Override
-                            public void onResponse(Call<Void> call, Response<Void> response) {
-                                if (response.isSuccessful()){
-                                    Toast.makeText(EditActivity.this, "변경성공", Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(EditActivity.this,MainActivity.class);
-                                    startActivity(intent);
-                                    finish();
-                                }else{
-                                    Toast.makeText(EditActivity.this, "변경실패", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-
-                            @Override
-                            public void onFailure(Call<Void> call, Throwable t) {
-                                Log.v("onFailure",t.getMessage());
-                            }
-                        });
-                    }
-
-                    else if (rb_meet.isChecked()) {
-                        ScheduleClass newSchedule = new ScheduleClass(change_content,
-                                "만남",
-                                year,
-                                month,
-                                day);
-
-                        //CALL
-                        Call<Void> call =  service.editSchedule(
-                                year,
-                                month,
-                                day,
-                                tv_b_content.getText().toString(),
-                                tv_b_category.getText().toString(),  //기존에있던 데이터를 찾기 위해서
-                                newSchedule);
-
-                        call.enqueue(new Callback<Void>() {
-                            @Override
-                            public void onResponse(Call<Void> call, Response<Void> response) {
-                                if (response.isSuccessful()){
-                                    Toast.makeText(EditActivity.this, "변경성공", Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(EditActivity.this,MainActivity.class);
-                                    startActivity(intent);
-                                    finish();
-                                }else{
-                                    Toast.makeText(EditActivity.this, "변경실패", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-
-                            @Override
-                            public void onFailure(Call<Void> call, Throwable t) {
-                                Log.v("onFailure",t.getMessage());
-                            }
-                        });
-                    }
-
-                    else if (rb_hobby.isChecked()) {
-                        ScheduleClass newSchedule = new ScheduleClass(change_content,
-                                "취미",
-                                year,
-                                month,
-                                day);
-
-                        //CALL
-                        Call<Void> call =  service.editSchedule(
-                                year,
-                                month,
-                                day,
-                                tv_b_content.getText().toString(),
-                                tv_b_category.getText().toString(),  //기존에있던 데이터를 찾기 위해서
-                                newSchedule);
-
-                        call.enqueue(new Callback<Void>() {
-                            @Override
-                            public void onResponse(Call<Void> call, Response<Void> response) {
-                                if (response.isSuccessful()){
-                                    Toast.makeText(EditActivity.this, "변경성공", Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(EditActivity.this,MainActivity.class);
-                                    startActivity(intent);
-                                    finish();
-                                }else{
-                                    Toast.makeText(EditActivity.this, "변경실패", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-
-                            @Override
-                            public void onFailure(Call<Void> call, Throwable t) {
-                                Log.v("onFailure",t.getMessage());
-                            }
-                        });
-                    }
-
-                    else if (rb_rest.isChecked()) {
-                        ScheduleClass newSchedule = new ScheduleClass(change_content,
-                                "여가",
-                                year,
-                                month,
-                                day);
-
-                        //CALL
-                        Call<Void> call =  service.editSchedule(
-                                year,
-                                month,
-                                day,
-                                tv_b_content.getText().toString(),
-                                tv_b_category.getText().toString(),  //기존에있던 데이터를 찾기 위해서
-                                newSchedule);
-
-                        call.enqueue(new Callback<Void>() {
-                            @Override
-                            public void onResponse(Call<Void> call, Response<Void> response) {
-                                if (response.isSuccessful()){
-                                    Toast.makeText(EditActivity.this, "변경성공", Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(EditActivity.this,MainActivity.class);
-                                    startActivity(intent);
-                                    finish();
-                                }else{
-                                    Toast.makeText(EditActivity.this, "변경실패", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-
-                            @Override
-                            public void onFailure(Call<Void> call, Throwable t) {
-                                Log.v("onFailure",t.getMessage());
-                            }
-                        });
-                    }
-
-                    else if (rb_study.isChecked()) {
-                        ScheduleClass newSchedule = new ScheduleClass(change_content,
-                                "공부",
-                                year,
-                                month,
-                                day);
-
-                        //CALL
-                        Call<Void> call =  service.editSchedule(
-                                year,
-                                month,
-                                day,
-                                tv_b_content.getText().toString(),
-                                tv_b_category.getText().toString(),  //기존에있던 데이터를 찾기 위해서
-                                newSchedule);
-
-                        call.enqueue(new Callback<Void>() {
-                            @Override
-                            public void onResponse(Call<Void> call, Response<Void> response) {
-                                if (response.isSuccessful()){
-                                    Toast.makeText(EditActivity.this, "변경성공", Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(EditActivity.this,MainActivity.class);
-                                    startActivity(intent);
-                                    finish();
-                                }else{
-                                    Toast.makeText(EditActivity.this, "변경실패", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-
-                            @Override
-                            public void onFailure(Call<Void> call, Throwable t) {
-                                Log.v("onFailure",t.getMessage());
-                            }
-                        });
-                    }
+                    if (rb_exercise.isChecked())    editData("운동", EditContent);
+                    else if (rb_meet.isChecked())   editData("만남", EditContent);
+                    else if (rb_hobby.isChecked())  editData("취미", EditContent);
+                    else if (rb_rest.isChecked())   editData("여가", EditContent);
+                    else if (rb_study.isChecked())  editData("공부", EditContent);
 
                 }
             }
         });
 
+
     }
+
+    public void editData(String c_category,String c_content){
+        ScheduleClass newSchedule = new ScheduleClass(c_content,
+                c_category,
+                schedule.getYear(),
+                schedule.getMonth(),
+                schedule.getDay(),
+                schedule.getId(),
+                false);
+
+        //CALL
+        Call<Integer> call =  service.editSchedule(
+                newSchedule.getId(),
+                newSchedule);
+
+        call.enqueue(new Callback<Integer>() {
+            @Override
+            public void onResponse(Call<Integer> call, Response<Integer> response) {
+                if (response.isSuccessful()){
+                    Toast.makeText(EditActivity.this, "변경성공", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(EditActivity.this,MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                }else{
+                    Toast.makeText(EditActivity.this, "변경실패", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Integer> call, Throwable t) {
+                Log.v("onFailure",t.getMessage());
+            }
+        });
+    }
+
+
 }
