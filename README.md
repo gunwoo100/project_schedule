@@ -631,10 +631,10 @@ _**• SearchViewAdaper**_
                 }
             });
 
-# • 6. ToDoList화면과 코드설명
+<br>
+<br>
 
-<br>
-<br>
+# • 6. ToDoList화면과 코드설명
 
 ![0317 ToDo화면 수정1](https://github.com/user-attachments/assets/da741540-2f5e-4704-bf9b-b3b33e4f057e)    ![0317 ToDo화면 수정2](https://github.com/user-attachments/assets/3aa4ba76-5600-4415-a063-764ed748c965)
 
