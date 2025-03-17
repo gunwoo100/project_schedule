@@ -433,20 +433,26 @@ _**• MyRvAdapter**_
         public void onClick(View view) {
 
             Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl("http://10.0.2.2:8080")
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
+                .baseUrl("http://10.0.2.2:8080")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
 
             service = retrofit.create(ScheduleService.class);
 
-            Call<ArrayList<ScheduleClass>> call = service.deleteSchedule(schedule.getId());
-            call.enqueue(new Callback<ArrayList<ScheduleClass>>() {
+            Call<Integer> call = service.deleteSchedule(schedule.getId());
+            call.enqueue(new Callback<Integer>() {
                 @Override
-                public void onResponse(Call<ArrayList<ScheduleClass>> call, Response<ArrayList<ScheduleClass>> response) {
+                public void onResponse(Call<Integer> call, Response<Integer> response) {
                     if (response.isSuccessful()){
-                        Toast.makeText(view.getContext(), "성공", Toast.LENGTH_SHORT).show();
-                        UpdateData(response.body());
-                        dialog.dismiss();
+                    Toast.makeText(view.getContext(), "성공", Toast.LENGTH_SHORT).show();
+                    data.remove(holder.getAdapterPosition());
+                    notifyDataSetChanged();
+                    if (data.isEmpty()){
+                        sad_image.setVisibility(View.VISIBLE);
+                        tv_noSchedule.setVisibility(View.VISIBLE);
+                        tv_noSchedule.setText("모든 일정을 지우셨습니다.");
+                    }
+                    dialog.dismiss();
                     }else{
                         Toast.makeText(view.getContext(), "실패", Toast.LENGTH_SHORT).show();
                         dialog.dismiss();
@@ -454,14 +460,14 @@ _**• MyRvAdapter**_
                 }
 
                 @Override
-                public void onFailure(Call<ArrayList<ScheduleClass>> call, Throwable t) {
+                public void onFailure(Call<Integer> call, Throwable t) {
                     Log.v("onFailure",t.getMessage());
                 }
             });
 
 
-        }
-    });
+            }
+        });
 
 • "삭제하기"버튼을 누르면 해당 일정의 id값을 얻은 다음에 서버쪽으로 전달해서 전달받은 id값을 이용해 해당 데이터를 없앤다.
 
