@@ -2,32 +2,6 @@ package com.example.myapplication.RvAdapter_ViewHolder;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.example.myapplication.Activity.EditActivity;
-import com.example.myapplication.R;
-import com.example.myapplication.Class.ScheduleClass;
-import com.example.myapplication.Service.ScheduleService;
-
-import java.util.ArrayList;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;package com.example.myapplication.RvAdapter_ViewHolder;
-
-import android.app.AlertDialog;
-import android.content.Intent;
 import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -93,8 +67,6 @@ public class MainRvAdapter extends RecyclerView.Adapter<MainViewHolder> {
         holder.tv_content.setText(data.get(position).getContent());
         holder.tv_category.setText(data.get(position).getCategory());
 
-
-
         holder.layout.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
@@ -157,6 +129,7 @@ public class MainRvAdapter extends RecyclerView.Adapter<MainViewHolder> {
                                     if (data.isEmpty()){
                                         sad_image.setVisibility(View.VISIBLE);
                                         tv_noSchedule.setVisibility(View.VISIBLE);
+                                        tv_noSchedule.setText("모든 일정을 지우셨습니다.");
                                     }
                                     dialog.dismiss();
                                 }else{
@@ -187,7 +160,6 @@ public class MainRvAdapter extends RecyclerView.Adapter<MainViewHolder> {
             }
 
         });
-
         holder.layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -203,7 +175,7 @@ public class MainRvAdapter extends RecyclerView.Adapter<MainViewHolder> {
                     @Override
                     public void onResponse(Call<Integer> call, Response<Integer> response) {
                         if (response.isSuccessful()){
-                            Log.v("CALL","");
+                            Toast.makeText(view.getContext(), "해당 일정을 완료하셨습니다.", Toast.LENGTH_SHORT).show();
                             holder.layout.setBackgroundResource(R.drawable.bolder7);
                         }
                     }
