@@ -953,8 +953,7 @@ ToDo화면에서 'ToDo일정'과 하단의 '완료된 일정'은 둘다 rv에 �
         @Override
         public void onClick(View view) {...
 
-![화면 캡처 2025-03-11 173004](https://github.com/user-attachments/assets/8e0a3f08-1094-4f18-afb1-8ed5f8735e13)  ![화면_캡처_2025-03-12_153348-removebg-preview](https://github.com/user-attachments/assets/4e4d4fa5-3865-47c0-b50f-0ba0915d4b09)
- ![화면 캡처 2025-03-11 173429](https://github.com/user-attachments/assets/45675852-1236-4097-8251-7e4bf3d73e47)
+![화면 캡처 2025-03-11 173004](https://github.com/user-attachments/assets/8e0a3f08-1094-4f18-afb1-8ed5f8735e13)![화면_캡처_2025-03-12_153348-removebg-preview](https://github.com/user-attachments/assets/4e4d4fa5-3865-47c0-b50f-0ba0915d4b09)![화면 캡처 2025-03-11 173429](https://github.com/user-attachments/assets/45675852-1236-4097-8251-7e4bf3d73e47)
 
 **• HTTP 중 Edit,Delete 코드 구현**
 
